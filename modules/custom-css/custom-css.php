@@ -744,7 +744,7 @@ class Jetpack_Custom_CSS {
 					<?php
 
 					printf(
-						__( 'Limit width to %1$s pixels for videos, full size images, and other shortcodes. (<a href="%2$s">More info</a>.)', 'jetpack' ),
+						__( 'Limit width to %1$s pixels for full size images. (<a href="%2$s">More info</a>.)', 'jetpack' ),
 						'<input type="text" id="custom_content_width_visible" value="' . esc_attr( $custom_content_width ) . '" size="4" />',
 						apply_filters( 'safecss_limit_width_link', 'http://jetpack.me/support/custom-css/#limited-width' )
 					);
