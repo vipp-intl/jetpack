@@ -421,6 +421,18 @@ class Jetpack_Custom_CSS {
 		return apply_filters( 'safecss_is_freetrial', false );
 	}
 
+	static function get_preprocessor_key() {
+		$safecss_post = Jetpack_Custom_CSS::get_current_revision();
+		return get_post_meta( $safecss_post['ID'], 'custom_css_preprocessor', true );
+	}
+
+	static function get_preprocessor() {
+		$preprocessors = apply_filters( 'jetpack_custom_css_preprocessors', array() );
+		$selected_preprocessor_key = self::get_preprocessor_key();
+		$selected_preprocessor = isset( $preprocessors[ $selected_preprocessor_key ] ) ? $preprocessors[ $selected_preprocessor_key ] : null;
+		return $selected_preprocessor;
+	}
+
 	static function get_css( $compressed = false ) {
 		$default_css = apply_filters( 'safecss_get_css_error', false );
 
