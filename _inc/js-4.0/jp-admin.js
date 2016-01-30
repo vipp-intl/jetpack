@@ -15,7 +15,12 @@
 		};
 
 		initEvents();
-		loadAllTabs();
+		buildTabs();
+		loadTab( 'Security', 'mod-feature-tab', '#uiTab_security' );
+		loadTab( 'Health', 'mod-feature-tab', '#uiTab_health' );
+		loadTab( 'Traffic', 'mod-feature-tab', '#uiTab_traffic' );
+		loadTab( 'More', 'mod-feature-tab', '#uiTab_more' );
+
 		adminAJAX();
 	});
 
@@ -37,19 +42,34 @@
 			}
 		};
 
-		$( '#jp-contain' ).tabs();
-
 		// Hide the successful connection message after a little bit
 		setTimeout( function(){
 			jQuery( '.jetpack-message:not( .stay-visible, .jetpack-err )' ).hide( 600 );
 		}, 6000);
 	}
 
-	function loadAllTabs() {
-		loadTab( 'Security', 'mod-feature-tab', '#security' );
-		loadTab( 'Health', 'mod-feature-tab', '#health' );
-		loadTab( 'Traffic', 'mod-feature-tab', '#traffic' );
-		loadTab( 'More', 'mod-feature-tab', '#more' );
+	function buildTabs() {
+
+		// jQuery UI Tabs hacks
+		var $tabs = $( '#jp-contain' );
+		$tabs.tabs({
+			create: function( event, ui ) {
+				// Adjust hashes to not affect URL when clicked.
+				var widget = $tabs.data( 'uiTabs' );
+				widget.panels.each( function( i ){
+					this.id = 'uiTab_' + this.id;
+					widget.anchors[i].hash = '#' + this.id;
+					$( widget.tabs[i] ).attr( 'aria-controls', this.id );
+				});
+			},
+
+			activate: function(event, ui) {
+				// Add the original 'clean' tab id to the URL hash.
+				window.location.hash = ui.newPanel.attr( 'id' ).replace( 'uiTab_', '' );
+			}
+		});
+
+		$( '#jp-tab-content' ).show();
 	}
 
 	/*
@@ -165,7 +185,7 @@
 						return;
 					}
 
-					window.location.hash = 'refresh';
+					//window.location.hash = 'refresh';
 				}
 
 			}, 'json' );

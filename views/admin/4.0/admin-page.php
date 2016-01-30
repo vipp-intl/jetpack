@@ -24,20 +24,23 @@
 				<li><a href="#settings">Settings</a></li>
 			</ul>
 
-			<div id="glance">
-				<?php include_once( 'glance-tmpl.php' ); ?>
-			</div>
-			<div id="security"></div>
-			<div id="health"></div>
-			<div id="traffic"></div>
-			<div id="more">
-				<?php include_once( 'more-tmpl.php' ); ?>
-			</div>
-			<div id="notices">
-				<?php include_once( 'notices-tmpl.php' ); ?>
-			</div>
-			<div id="settings">
-				<?php include_once( 'settings-tmpl.php' ); ?>
+
+			<div id="jp-tab-content">
+				<div id="glance">
+					<?php include_once( 'glance-tmpl.php' ); ?>
+				</div>
+				<div id="security"></div>
+				<div id="health"></div>
+				<div id="traffic"></div>
+				<div id="more">
+					<?php include_once( 'more-tmpl.php' ); ?>
+				</div>
+				<div id="notices">
+					<?php include_once( 'notices-tmpl.php' ); ?>
+				</div>
+				<div id="settings">
+					<?php include_once( 'settings-tmpl.php' ); ?>
+				</div>
 			</div>
 		</div>
 
