@@ -52,7 +52,8 @@ require_once( JETPACK__PLUGIN_DIR . 'class.jetpack-tracks.php'        );
 require_once( JETPACK__PLUGIN_DIR . 'modules/module-headings.php');
 
 if ( is_admin() ) {
-	require_once( JETPACK__PLUGIN_DIR . 'class.jetpack-admin.php'     );
+	require_once( JETPACK__PLUGIN_DIR . 'class.jetpack-admin-4.0.php' );
+//	require_once( JETPACK__PLUGIN_DIR . 'class.jetpack-admin.php'     );
 	require_once( JETPACK__PLUGIN_DIR . 'class.jetpack-jitm.php'      );
 }
 
