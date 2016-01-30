@@ -7,7 +7,7 @@
  * Sort Order: 20
  * Requires Connection: Yes
  * Auto Activate: No
- * Module Tags: Social
+ * Module Tags: Social, Traffic
  * Additional Search Queries: comments, comment, facebook, twitter, google+, social
  */
 

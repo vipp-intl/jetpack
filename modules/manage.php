@@ -9,7 +9,7 @@
  * Requires Connection: Yes
  * Auto Activate: No
  * Module Tags: Centralized Management, Recommended
- * Feature: Recommended, Jumpstart
+ * Feature: Recommended, Jumpstart, Health
  * Additional Search Queries: manage, management, remote
  */
 

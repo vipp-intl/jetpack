@@ -6,7 +6,7 @@
  * First Introduced: 1.9
  * Requires Connection: Yes
  * Auto Activate: Yes
- * Module Tags: Other
+ * Module Tags: Other, Traffic
  * Additional Search Queries: notification, notifications, toolbar, adminbar, push, comments
  */
 

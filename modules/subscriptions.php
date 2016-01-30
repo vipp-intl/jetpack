@@ -9,7 +9,7 @@
  * Requires Connection: Yes
  * Auto Activate: Yes
  * Module Tags: Social
- * Feature: Jumpstart
+ * Feature: Jumpstart, Traffic
  * Additional Search Queries: subscriptions, subscription, email, follow, followers, subscribers, signup
  */
 
