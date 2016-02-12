@@ -6,9 +6,12 @@
  */
 
 // Loads the stats chart & resources.
-stats_reports_load(); stats_js_remove_stnojs_cookie(); stats_js_load_page_via_ajax(); stats_reports_page( true ); ?>
-
-<ul><li>Here are the stats</li></ul>
+if ( Jetpack::is_module_active( 'stats' ) ) {
+	stats_reports_load(); stats_js_remove_stnojs_cookie(); stats_js_load_page_via_ajax(); stats_reports_page( true );
+} else {
+	echo 'activate stats to see some awesome stuff! <br>';
+}
+?>
 
 <b>Site Security</b>
 <ul>
