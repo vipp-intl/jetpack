@@ -1,5 +1,13 @@
 <h2>Welcome to At A Glance!</h2>
-<b>Stats!</b><br>
+
+<?php
+/*
+ * Stats area
+ */
+
+// Loads the stats chart & resources.
+stats_reports_load(); stats_js_remove_stnojs_cookie(); stats_js_load_page_via_ajax(); stats_reports_page( true ); ?>
+
 <ul><li>Here are the stats</li></ul>
 
 <b>Site Security</b>
