@@ -6,7 +6,8 @@
 	// INIT
 	///////////////////////////////////////
 
-	var data;
+	var data,
+		tmplGlanceMosaic = wp.template( 'glance-mosaic' );
 
 	$( document ).ready(function () {
 
@@ -15,6 +16,7 @@
 		};
 
 		initEvents();
+		loadGlance();
 		buildTabs();
 		loadTab( 'Security', 'mod-feature-tab', '#uiTab_security' );
 		loadTab( 'Health', 'mod-feature-tab', '#uiTab_health' );
@@ -46,6 +48,35 @@
 		setTimeout( function(){
 			jQuery( '.jetpack-message:not( .stay-visible, .jetpack-err )' ).hide( 600 );
 		}, 6000);
+	}
+
+	/*
+	Loads the inital state of At A Glance section.
+	 */
+	function loadGlance() {
+		$( '#glance-site-security-protect' ).append( tmplGlanceMosaic( {
+			title:   jp_data.glanceProtect.title,
+			size:    jp_data.glanceProtect.size,
+			state:   jp_data.glanceProtect.state,
+			data:    jp_data.glanceProtect.data,
+			message: jp_data.glanceProtect.message
+		} ) );
+
+		$( '#glance-site-security-scan' ).append( tmplGlanceMosaic( {
+			title:   jp_data.glanceScan.title,
+			size:    jp_data.glanceScan.size,
+			state:   jp_data.glanceScan.state,
+			data:    jp_data.glanceScan.data,
+			message: jp_data.glanceScan.message
+		} ) );
+
+		$( '#glance-site-security-monitor' ).append( tmplGlanceMosaic( {
+			title:   jp_data.glanceMonitor.title,
+			size:    jp_data.glanceMonitor.size,
+			state:   jp_data.glanceMonitor.state,
+			data:    jp_data.glanceMonitor.data,
+			message: jp_data.glanceMonitor.message
+		} ) );
 	}
 
 	function buildTabs() {

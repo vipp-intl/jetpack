@@ -229,6 +229,65 @@ class Jetpack_Landing_Page_4 extends Jetpack_Admin_Page_4 {
 
 	}
 
+	/*
+	 * Data for displaying in Protect section of At A Glance
+	 */
+	function at_a_glance_site_security_protect_state() {
+		if ( ! Jetpack::is_module_active( 'protect' ) ) {
+			return array(
+				'title'   => 'Protect',
+				'size'    => 'large',
+				'state'   => 'inactive',
+				'data'    => null,
+				'message' => __( 'Please activate Protect', 'jetpack' )
+			);
+		}
+
+		return array(
+			'title'   => 'Protect',
+			'size'    => 'large',
+			'state'   => 'active',
+			'data'    => get_site_option( 'jetpack_protect_blocked_attempts' ),
+			'message' => __( 'Malicious attacks blocked.', 'jetpack' )
+		);
+	}
+
+	/*
+	 * Data for displaying in Scan section of At A Glance
+	 */
+	function at_a_glance_site_security_scan_state() {
+		return array(
+			'title'   => __( 'Security Scan', 'jetpack' ),
+			'size'    => 'small',
+			'state'   => 'inactive',
+			'data'    => 'No Threats Found',
+			'message' => __( 'This is a placeholder until we get live data', 'jetpack' )
+		);
+	}
+
+	/*
+	 * Data for displaying in Monitor section of At A Glance
+	 */
+	function at_a_glance_site_security_monitor_state() {
+		if ( ! Jetpack::is_module_active( 'monitor' ) ) {
+			return array(
+				'title'   => __( 'Site Monitoring', 'jetpack' ),
+				'size'    => 'small',
+				'state'   => 'inactive',
+				'data'    => null,
+				'message' => __( 'Please activate Monitor', 'jetpack' )
+			);
+		}
+
+		return array(
+			'title'   => __( 'Site Monitoring', 'jetpack' ),
+			'size'    => 'small',
+			'state'   => 'active',
+			'data'    => '<9999 days> without downtime',
+			'message' => __( 'Monitor Schmonitor', 'jetpack' )
+		);
+	}
+
 	function page_admin_scripts() {
 		wp_enqueue_script( 'jp-admin-js', plugins_url( '_inc/js-4.0/jp-admin.js', JETPACK__PLUGIN_FILE ),
 			array( 'jquery-ui-tabs', 'jquery', 'wp-util', 'jquery-ui-accordion' ), JETPACK__VERSION . '-20160128' );
@@ -243,6 +302,9 @@ class Jetpack_Landing_Page_4 extends Jetpack_Admin_Page_4 {
 				'activate_nonce' => wp_create_nonce( 'jetpack-jumpstart-nonce' ),
 				'admin_nonce' => wp_create_nonce( 'jetpack-admin-nonce' ),
 				'site_url_manage' => Jetpack::build_raw_urls( get_site_url() ),
+				'glanceProtect' => $this->at_a_glance_site_security_protect_state(),
+				'glanceScan'    => $this->at_a_glance_site_security_scan_state(),
+				'glanceMonitor' => $this->at_a_glance_site_security_monitor_state(),
 			)
 		);
 	}
