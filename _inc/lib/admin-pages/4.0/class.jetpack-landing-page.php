@@ -279,12 +279,17 @@ class Jetpack_Landing_Page_4 extends Jetpack_Admin_Page_4 {
 			);
 		}
 
+		// Calculate "Days Since" last downtime.
+		$monitor       = new Jetpack_Monitor();
+		$last_downtime = $monitor->monitor_get_last_downtime();
+		$time_since    = human_time_diff( strtotime( $last_downtime ), strtotime( 'now' ) );
+
 		return array(
 			'title'   => __( 'Site Monitoring', 'jetpack' ),
 			'size'    => 'small',
 			'state'   => 'active',
-			'data'    => '<9999 days> without downtime',
-			'message' => __( 'Monitor Schmonitor', 'jetpack' )
+			'data'    => $time_since,
+			'message' => __( 'without downtime.', 'jetpack' )
 		);
 	}
 
