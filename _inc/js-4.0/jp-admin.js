@@ -54,6 +54,7 @@
 	Loads the inital state of At A Glance section.
 	 */
 	function loadGlance() {
+		// Security Mosaic
 		$( '#glance-site-security-protect' ).append( tmplGlanceMosaic( {
 			title:   jp_data.glanceProtect.title,
 			size:    jp_data.glanceProtect.size,
@@ -76,6 +77,31 @@
 			state:   jp_data.glanceMonitor.state,
 			data:    jp_data.glanceMonitor.data,
 			message: jp_data.glanceMonitor.message
+		} ) );
+
+		// Health Mosaic
+		$( '#glance-site-health-anti-spam' ).append( tmplGlanceMosaic( {
+			title:   jp_data.glanceAntiSpam.title,
+			size:    jp_data.glanceAntiSpam.size,
+			state:   jp_data.glanceAntiSpam.state,
+			data:    jp_data.glanceAntiSpam.data,
+			message: jp_data.glanceAntiSpam.message
+		} ) );
+
+		$( '#glance-site-health-site-backups' ).append( tmplGlanceMosaic( {
+			title:   jp_data.glanceBackup.title,
+			size:    jp_data.glanceBackup.size,
+			state:   jp_data.glanceBackup.state,
+			data:    jp_data.glanceBackup.data,
+			message: jp_data.glanceBackup.message
+		} ) );
+
+		$( '#glance-site-health-plugin-updates' ).append( tmplGlanceMosaic( {
+			title:   jp_data.glancePluginUpdates.title,
+			size:    jp_data.glancePluginUpdates.size,
+			state:   jp_data.glancePluginUpdates.state,
+			data:    jp_data.glancePluginUpdates.data,
+			message: jp_data.glancePluginUpdates.message
 		} ) );
 	}
 

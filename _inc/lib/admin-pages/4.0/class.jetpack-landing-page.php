@@ -297,6 +297,80 @@ class Jetpack_Landing_Page_4 extends Jetpack_Admin_Page_4 {
 		);
 	}
 
+	/*
+	 * Data for displaying in Monitor section of At A Glance
+	 */
+	function at_a_glance_site_health_akismet_state() {
+		if ( ! is_plugin_active( 'akismet/akismet.php' ) ) {
+			return array(
+				'title'   => __( 'Anti-spam', 'jetpack' ),
+				'size'    => 'large',
+				'state'   => 'inactive',
+				'data'    => null,
+				'message' => __( 'Please activate Akismet', 'jetpack' )
+			);
+		}
+
+		$akismet_key = Akismet::verify_key( Akismet::get_api_key() );
+		if ( ! $akismet_key || 'invalid' === $akismet_key || 'failed' === $akismet_key ) {
+			return array(
+				'title'   => __( 'Anti-spam', 'jetpack' ),
+				'size'    => 'large',
+				'state'   => 'active-caution',
+				'data'    => null,
+				'message' => __( 'Something is wrong with your Anti-spam key.', 'jetpack' )
+			);
+		}
+
+		$count_data = Akismet_Admin::get_stats( Akismet::get_api_key() );
+
+		return array(
+			'title'   => __( 'Anti-spam', 'jetpack' ),
+			'size'    => 'large',
+			'state'   => 'active-caution',
+			'data'    => esc_html( $count_data['all']->spam ),
+			'message' => __( 'Spam comments thwarted.', 'jetpack' )
+		);
+	}
+
+	/*
+	 * Data for displaying Backups in At A Glance
+	 */
+	function at_a_glance_site_health_backup_state() {
+		return array(
+			'title'   => __( 'Site Backups', 'jetpack' ),
+			'size'    => 'small',
+			'state'   => 'active-danger',
+			'data'    => 'Last Backup Failed',
+			'message' => __( 'This is a placeholder until we get live data', 'jetpack' )
+		);
+	}
+
+	/*
+	 * Data for displaying plugin updates in At A Glance
+	 */
+	function at_a_glance_site_health_plugin_updates_state() {
+		$plugin_updates = count( get_plugin_updates() );
+
+		if ( empty( $plugin_updates ) ) {
+			return array(
+				'title'   => __( 'Plugin Updates', 'jetpack' ),
+				'size'    => 'small',
+				'state'   => 'active',
+				'data'    => null,
+				'message' => __( 'All plugins up to date!', 'jetpack' )
+			);
+		} else {
+			return array(
+				'title'   => __( 'Plugin Updates', 'jetpack' ),
+				'size'    => 'small',
+				'state'   => 'active-caution',
+				'data'    => esc_html( $plugin_updates ),
+				'message' => __( 'Plugins need updating', 'jetpack' )
+			);
+		}
+	}
+
 	function page_admin_scripts() {
 		wp_enqueue_script( 'jp-admin-js', plugins_url( '_inc/js-4.0/jp-admin.js', JETPACK__PLUGIN_FILE ),
 			array( 'jquery-ui-tabs', 'jquery', 'wp-util', 'jquery-ui-accordion' ), JETPACK__VERSION . '-20160128' );
@@ -311,9 +385,12 @@ class Jetpack_Landing_Page_4 extends Jetpack_Admin_Page_4 {
 				'activate_nonce' => wp_create_nonce( 'jetpack-jumpstart-nonce' ),
 				'admin_nonce' => wp_create_nonce( 'jetpack-admin-nonce' ),
 				'site_url_manage' => Jetpack::build_raw_urls( get_site_url() ),
-				'glanceProtect' => $this->at_a_glance_site_security_protect_state(),
-				'glanceScan'    => $this->at_a_glance_site_security_scan_state(),
-				'glanceMonitor' => $this->at_a_glance_site_security_monitor_state(),
+				'glanceProtect'  => $this->at_a_glance_site_security_protect_state(),
+				'glanceScan'     => $this->at_a_glance_site_security_scan_state(),
+				'glanceMonitor'  => $this->at_a_glance_site_security_monitor_state(),
+				'glanceAntiSpam' => $this->at_a_glance_site_health_akismet_state(),
+				'glanceBackup'   => $this->at_a_glance_site_health_backup_state(),
+				'glancePluginUpdates' => $this->at_a_glance_site_health_plugin_updates_state(),
 			)
 		);
 	}
