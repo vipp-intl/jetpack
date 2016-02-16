@@ -371,6 +371,74 @@ class Jetpack_Landing_Page_4 extends Jetpack_Admin_Page_4 {
 		}
 	}
 
+	/*
+	 * Data for displaying Image Performance (photon)
+	 */
+	function at_a_glance_traffic_tools_img_performance_state() {
+		if ( ! Jetpack::is_module_active( 'photon' ) ) {
+			return array(
+				'title'   => __( 'Image Performance', 'jetpack' ),
+				'size'    => 'small',
+				'state'   => 'inactive',
+				'data'    => null,
+				'message' => __( 'Please activate Photon', 'jetpack' )
+			);
+		}
+
+		return array(
+			'title'   => __( 'Image Performance', 'jetpack' ),
+			'size'    => 'small',
+			'state'   => 'active',
+			'data'    => null,
+			'message' => __( 'Photon is on and enhancing image performance.', 'jetpack' )
+		);
+	}
+
+	/*
+	 * Data for displaying Site Verification
+	 */
+	function at_a_glance_traffic_tools_site_verification_state() {
+		if ( ! Jetpack::is_module_active( 'verification-tools' ) ) {
+			return array(
+				'title'   => __( 'Site Verification', 'jetpack' ),
+				'size'    => 'small',
+				'state'   => 'inactive',
+				'data'    => null,
+				'message' => __( 'Please activate Site Verification.', 'jetpack' )
+			);
+		}
+
+		$verification_services_codes = get_option( 'verification_services_codes' );
+
+		if ( ! $verification_services_codes ) {
+			return array(
+				'title'   => __( 'Site Verification', 'jetpack' ),
+				'size'    => 'small',
+				'state'   => 'active-caution',
+				'data'    => null,
+				'message' => __( 'Verify your site with Google, Bing, and Pinterest for better indexing and ranking!', 'jetpack' )
+			);
+		}
+
+		$services_with_code = '';
+		foreach ( $verification_services_codes as $service => $code ) {
+			$services_with_code .= $service . ', ';
+		}
+
+		// format the list string
+		$services_with_code = rtrim( $services_with_code, ', ' );
+		$last_comma         = strrpos( $services_with_code, ',' );
+		$services_with_code = substr_replace( $services_with_code, __( ' and', 'jetpack' ), $last_comma, 1 );
+
+		return array(
+			'title'   => __( 'Site Verification', 'jetpack' ),
+			'size'    => 'small',
+			'state'   => 'active',
+			'data'    => null,
+			'message' => __( 'Your site is verified with ', 'jetpack' ) . esc_html( $services_with_code )
+		);
+	}
+
 	function page_admin_scripts() {
 		wp_enqueue_script( 'jp-admin-js', plugins_url( '_inc/js-4.0/jp-admin.js', JETPACK__PLUGIN_FILE ),
 			array( 'jquery-ui-tabs', 'jquery', 'wp-util', 'jquery-ui-accordion' ), JETPACK__VERSION . '-20160128' );
@@ -391,6 +459,8 @@ class Jetpack_Landing_Page_4 extends Jetpack_Admin_Page_4 {
 				'glanceAntiSpam' => $this->at_a_glance_site_health_akismet_state(),
 				'glanceBackup'   => $this->at_a_glance_site_health_backup_state(),
 				'glancePluginUpdates' => $this->at_a_glance_site_health_plugin_updates_state(),
+				'glancePhoton' => $this->at_a_glance_traffic_tools_img_performance_state(),
+				'glanceSiteVerification' => $this->at_a_glance_traffic_tools_site_verification_state(),
 			)
 		);
 	}

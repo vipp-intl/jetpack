@@ -103,6 +103,24 @@
 			data:    jp_data.glancePluginUpdates.data,
 			message: jp_data.glancePluginUpdates.message
 		} ) );
+
+		// Traffic Tools
+		$( '#glance-site-traffic-img-performance' ).append( tmplGlanceMosaic( {
+			title:   jp_data.glancePhoton.title,
+			size:    jp_data.glancePhoton.size,
+			state:   jp_data.glancePhoton.state,
+			data:    jp_data.glancePhoton.data,
+			message: jp_data.glancePhoton.message
+		} ) );
+
+		$( '#glance-site-traffic-site-verification' ).append( tmplGlanceMosaic( {
+			title:   jp_data.glanceSiteVerification.title,
+			size:    jp_data.glanceSiteVerification.size,
+			state:   jp_data.glanceSiteVerification.state,
+			data:    jp_data.glanceSiteVerification.data,
+			message: jp_data.glanceSiteVerification.message
+		} ) );
+
 	}
 
 	function buildTabs() {

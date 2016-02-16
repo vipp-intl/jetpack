@@ -28,21 +28,21 @@
 	</div>
 </script>
 
-<div id="at-a-glance-site-security">
+<div id="at-a-glance-site-security" class="glance-section">
 	<h2>Site Security:</h2>
 	<div id="glance-site-security-protect"></div>
 	<div id="glance-site-security-scan"></div>
 	<div id="glance-site-security-monitor"></div>
 </div>
 
-<div id="glance-site-health">
+<div id="glance-site-health" class="glance-section">
 	<h2>Site Health</h2>
 	<div id="glance-site-health-anti-spam"></div>
 	<div id="glance-site-health-site-backups"></div>
 	<div id="glance-site-health-plugin-updates"></div>
 </div>
 
-<div id="glance-site-traffic-tools">
+<div id="glance-site-traffic-tools" class="glance-section">
 	<h2>Traffic Tools</h2>
 	<div id="glance-site-traffic-img-performance"></div>
 	<div id="glance-site-traffic-site-verification"></div>
@@ -51,6 +51,10 @@
 <a href="#">What would you like to see on your dashboard?</a>
 
 <style>
+	.glance-section {
+		width: 100%;
+	}
+
 	#chartswitch li {
 		display: inline;
 		margin: 0 20px;
@@ -136,7 +140,7 @@
 		background: #fff;
 		display: inline-block;
 		min-height: 100px;
-		margin-bottom: 20px
+		margin: 1%;
 	}
 
 	.mosaic-large {
@@ -147,7 +151,7 @@
 
 	.mosaic-small {
 		width: 48%;
-		float: right;
+		float: left;
 	}
 
 </style>
