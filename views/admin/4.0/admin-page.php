@@ -20,7 +20,6 @@
 				<li><a href="#health">Health</a></li>
 				<li><a href="#traffic">Traffic</a></li>
 				<li><a href="#more">More</a></li>
-				<li><a href="#notices">Notices</a></li>
 				<li><a href="#settings">Settings</a></li>
 			</ul>
 
@@ -34,9 +33,6 @@
 				<div id="traffic"></div>
 				<div id="more">
 					<?php include_once( 'more-tmpl.php' ); ?>
-				</div>
-				<div id="notices">
-					<?php include_once( 'notices-tmpl.php' ); ?>
 				</div>
 				<div id="settings">
 					<?php include_once( 'settings-tmpl.php' ); ?>
