@@ -21,31 +21,31 @@
 <!--<button id="activate-stats" class="state-trigger">Activate-stats</button>-->
 <!--<button id="deactivate-stats" class="state-trigger">Deactivate Stats</button>-->
 <script type="text/html" id="tmpl-glance-mosaic">
-	<div class="jp-mosaic-box mosaic-{{ data.size }}">
-		<h4 class="jp-mosaic-title">{{ data.title }}</h4>
-		<span>{{ data.data }}</span>
-		<p>{{ data.message }}</p>
+	<div class="jp-mosaic-box mosaic-{{ data.glanceData.size }}">
+		<h4 class="jp-mosaic-title">{{ data.glanceData.title }}</h4>
+		<span>{{ data.glanceData.data }}</span>
+		<p>{{ data.glanceData.message }}</p>
 	</div>
 </script>
 
 <div id="at-a-glance-site-security" class="glance-section">
 	<h2>Site Security:</h2>
-	<div id="glance-site-security-protect"></div>
-	<div id="glance-site-security-scan"></div>
-	<div id="glance-site-security-monitor"></div>
+	<div id="glance-metabox-protect"></div>
+	<div id="glance-metabox-scan"></div>
+	<div id="glance-metabox-monitor"></div>
 </div>
 
 <div id="glance-site-health" class="glance-section">
 	<h2>Site Health</h2>
-	<div id="glance-site-health-anti-spam"></div>
-	<div id="glance-site-health-site-backups"></div>
-	<div id="glance-site-health-plugin-updates"></div>
+	<div id="glance-metabox-anti-spam"></div>
+	<div id="glance-metabox-site-backups"></div>
+	<div id="glance-metabox-plugin-updates"></div>
 </div>
 
 <div id="glance-site-traffic-tools" class="glance-section">
 	<h2>Traffic Tools</h2>
-	<div id="glance-site-traffic-img-performance"></div>
-	<div id="glance-site-traffic-site-verification"></div>
+	<div id="glance-metabox-img-performance"></div>
+	<div id="glance-metabox-site-verification"></div>
 </div>
 
 <a href="#">What would you like to see on your dashboard?</a>

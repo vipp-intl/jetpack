@@ -1,4 +1,5 @@
 <?php
+include_once( 'class.jetpack-admin-data.php' );
 
 // Shared logic between Jetpack admin pages
 abstract class Jetpack_Admin_Page_4 {
@@ -16,6 +17,7 @@ abstract class Jetpack_Admin_Page_4 {
 
 	function __construct() {
 		$this->jetpack = Jetpack::init();
+		new Jetpack_Admin_Data();
 	}
 
 	function add_actions() {

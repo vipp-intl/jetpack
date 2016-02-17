@@ -1,6 +1,6 @@
-/* global wp, jp_data, jQuery */
+/* global wp, jp_data, glanceData, jQuery */
 
-(function( $, modules, currentVersion, jp_data ) {
+(function( $, modules, currentVersion, jp_data, glanceData ) {
 
 	///////////////////////////////////////
 	// INIT
@@ -50,79 +50,6 @@
 		}, 6000);
 	}
 
-	/*
-	Loads the inital state of At A Glance section.
-	 */
-	function loadGlance() {
-		// Security Mosaic
-		$( '#glance-site-security-protect' ).append( tmplGlanceMosaic( {
-			title:   jp_data.glanceProtect.title,
-			size:    jp_data.glanceProtect.size,
-			state:   jp_data.glanceProtect.state,
-			data:    jp_data.glanceProtect.data,
-			message: jp_data.glanceProtect.message
-		} ) );
-
-		$( '#glance-site-security-scan' ).append( tmplGlanceMosaic( {
-			title:   jp_data.glanceScan.title,
-			size:    jp_data.glanceScan.size,
-			state:   jp_data.glanceScan.state,
-			data:    jp_data.glanceScan.data,
-			message: jp_data.glanceScan.message
-		} ) );
-
-		$( '#glance-site-security-monitor' ).append( tmplGlanceMosaic( {
-			title:   jp_data.glanceMonitor.title,
-			size:    jp_data.glanceMonitor.size,
-			state:   jp_data.glanceMonitor.state,
-			data:    jp_data.glanceMonitor.data,
-			message: jp_data.glanceMonitor.message
-		} ) );
-
-		// Health Mosaic
-		$( '#glance-site-health-anti-spam' ).append( tmplGlanceMosaic( {
-			title:   jp_data.glanceAntiSpam.title,
-			size:    jp_data.glanceAntiSpam.size,
-			state:   jp_data.glanceAntiSpam.state,
-			data:    jp_data.glanceAntiSpam.data,
-			message: jp_data.glanceAntiSpam.message
-		} ) );
-
-		$( '#glance-site-health-site-backups' ).append( tmplGlanceMosaic( {
-			title:   jp_data.glanceBackup.title,
-			size:    jp_data.glanceBackup.size,
-			state:   jp_data.glanceBackup.state,
-			data:    jp_data.glanceBackup.data,
-			message: jp_data.glanceBackup.message
-		} ) );
-
-		$( '#glance-site-health-plugin-updates' ).append( tmplGlanceMosaic( {
-			title:   jp_data.glancePluginUpdates.title,
-			size:    jp_data.glancePluginUpdates.size,
-			state:   jp_data.glancePluginUpdates.state,
-			data:    jp_data.glancePluginUpdates.data,
-			message: jp_data.glancePluginUpdates.message
-		} ) );
-
-		// Traffic Tools
-		$( '#glance-site-traffic-img-performance' ).append( tmplGlanceMosaic( {
-			title:   jp_data.glancePhoton.title,
-			size:    jp_data.glancePhoton.size,
-			state:   jp_data.glancePhoton.state,
-			data:    jp_data.glancePhoton.data,
-			message: jp_data.glancePhoton.message
-		} ) );
-
-		$( '#glance-site-traffic-site-verification' ).append( tmplGlanceMosaic( {
-			title:   jp_data.glanceSiteVerification.title,
-			size:    jp_data.glanceSiteVerification.size,
-			state:   jp_data.glanceSiteVerification.state,
-			data:    jp_data.glanceSiteVerification.data,
-			message: jp_data.glanceSiteVerification.message
-		} ) );
-
-	}
-
 	function buildTabs() {
 
 		// jQuery UI Tabs hacks
@@ -145,6 +72,28 @@
 		});
 
 		$( '#jp-tab-content' ).show();
+	}
+
+	/*
+	 Loads the inital state of At A Glance section.
+	 */
+	function loadGlance() {
+		var elements = [
+			'protect',
+			'scan',
+			'monitor',
+			'anti-spam',
+			'site-backups',
+			'plugin-updates',
+			'img-performance',
+			'site-verification'
+		];
+
+		_.each( elements, function( el ) {
+			$( '#glance-metabox-' + el ).append( tmplGlanceMosaic( {
+				glanceData: glanceData[ el ]
+			} ) );
+		} );
 	}
 
 	/*
@@ -287,4 +236,4 @@
 		}, 'json' );
 	}
 
-})( jQuery, jp_data.modules, jp_data.currentVersion, jp_data );
+})( jQuery, jp_data.modules, jp_data.currentVersion, jp_data, glanceData );
