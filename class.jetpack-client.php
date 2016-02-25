@@ -108,9 +108,13 @@ class Jetpack_Client {
 		}
 
 		$request['headers'] = array(
-			'Authorization' => "X_JETPACK " . join( ' ', $header_pieces ),
- 			'Host'          => 'public-api.wordpress.com'
+			'Authorization' => "X_JETPACK " . join( ' ', $header_pieces )
 		);
+
+		$host = parse_url( $url, PHP_URL_HOST );
+		if ( $host === JETPACK__WPCOM_JSON_API_HOST ) {
+			$request['headers']['Host'] = 'public-api.wordpress.com';
+		}
 
 		if ( 'header' != $args['auth_location'] ) {
 			$url = add_query_arg( 'signature', urlencode( $signature ), $url );
