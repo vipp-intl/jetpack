@@ -384,21 +384,57 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
  * This is the chunk that handles overriding core media stuff so VideoPress can display natively.
  */
 
+/**
+ * Make sure that any Video that has a VideoPress GUID passes that data back.
+ */
+add_filter( 'wp_prepare_attachment_for_js', 'videopress_prepare_attachment_for_js' );
+function videopress_prepare_attachment_for_js( $post ) {
+	if ( 'video' === $post['type'] ) {
+		$guid = get_post_meta( $post['id'], 'videopress_guid' );
+		if ( $guid ) {
+			$post['videopress_guid'] = $guid;
+		}
+	}
+	return $post;
+}
+
+/**
+ * Wherever the Media Modal is deployed, also deploy our overrides.
+ */
 add_action( 'wp_enqueue_media', 'add_videopress_media_overrides' );
 function add_videopress_media_overrides() {
 	add_action( 'admin_print_footer_scripts', 'videopress_override_media_templates', 11 );
 }
 
+/**
+ * Our video overrides!
+ *
+ * We have a template for the iframe to get injected.
+ */
 function videopress_override_media_templates(){
 	?>
+	<script type="text/html" id="tmpl-videopress_iframe_vnext">
+		<iframe style="display: block; max-width: 100%;" width="{{ data.width }}" height="{{ data.height }}" src="https://videopress.com/embed/{{ data.guid }}?{{ data.urlargs }}" frameborder='0' allowfullscreen></iframe>
+	</script>
 	<script>
 		(function( TwoColumn ){
-			var old_render = TwoColumn.prototype.render;
+			var old_render  = TwoColumn.prototype.render,
+				vp_template = wp.template( 'videopress_iframe_vnext' );
 
 			TwoColumn.prototype.render = function() {
+				// Have the original renderer run first.
 				old_render.apply( this, arguments );
 
-				this.$('.attachment-media-view').text('hi');
+				// Now our stuff!
+				if ( 'video' === this.model.get('type') ) {
+					if ( this.model.get('videopress_guid') ) {
+						this.$('.attachment-media-view .thumbnail-video').html( vp_template({
+							guid   : this.model.get('videopress_guid'),
+							width  : this.model.get('width'),
+							height : this.model.get('height')
+						}));
+					}
+				}
 			}
 		})( wp.media.view.Attachment.Details.TwoColumn );
 	</script>
