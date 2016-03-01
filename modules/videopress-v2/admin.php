@@ -386,25 +386,21 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 
 add_action( 'wp_enqueue_media', 'add_videopress_media_overrides' );
 function add_videopress_media_overrides() {
-	add_action( 'admin_footer', 'videopress_footer_early', 1 );
+	add_action( 'admin_print_footer_scripts', 'videopress_override_media_templates', 11 );
 }
 
-function videopress_footer_early() {
-	// Template(s):
+function videopress_override_media_templates(){
 	?>
-	<script type="text/html" id="tmpl-videopress-details-two-column">
-		<h1>HI</h1>
+	<script>
+		(function( TwoColumn ){
+			var old_render = TwoColumn.prototype.render;
+
+			TwoColumn.prototype.render = function() {
+				old_render.apply( this, arguments );
+
+				this.$('.attachment-media-view').text('hi');
+			}
+		})( wp.media.view.Attachment.Details.TwoColumn );
 	</script>
 	<?php
-
-	// And JS that replaces core with them.
-	add_action( 'admin_footer', function(){
-		?>
-		<script>
-			jQuery(document).ready(function(){
-				wp.media.view.Attachment.Details.TwoColumn.prototype.template = wp.template( 'videopress-details-two-column' );
-			});
-		</script>
-		<?php
-	}, 999 );
 }
