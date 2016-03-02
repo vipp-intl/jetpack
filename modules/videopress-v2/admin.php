@@ -305,7 +305,12 @@ function videopress_download_poster_image( $url, $attachment_id ) {
 	}
 
 	// Do the validation and storage stuff.
-	return media_handle_sideload( $file_array, $attachment_id, null );
+	$thumbnail_id = media_handle_sideload( $file_array, $attachment_id, null );
+
+	// Flag it as poster image, so we can exclude it from display.
+	update_post_meta( $thumbnail_id, 'videopress_poster_image', 1 );
+
+	return $thumbnail_id;
 }
 
 /**
@@ -383,6 +388,30 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 /*
  * This is the chunk that handles overriding core media stuff so VideoPress can display natively.
  */
+
+/**
+ * Filter out any videopress video posters that we've downloaded,
+ * so that they don't seem to display twice.
+ */
+add_filter( 'ajax_query_attachments_args', 'videopress_ajax_query_attachments_args' );
+function videopress_ajax_query_attachments_args( $args ) {
+	$meta_query = array(
+		array(
+			'key'     => 'videopress_poster_image',
+			'compare' => 'NOT EXISTS',
+		),
+	);
+
+	// If there was already a meta query, let's AND it via
+	// nesting it with our new one. No need to specify the
+	// relation, as it defaults to AND.
+	if ( ! empty( $args['meta_query'] ) ) {
+		$meta_query[] = $args['meta_query'];
+	}
+	$args['meta_query'] = $meta_query;
+
+	return $args;
+}
 
 /**
  * Make sure that any Video that has a VideoPress GUID passes that data back.
