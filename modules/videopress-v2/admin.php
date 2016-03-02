@@ -390,6 +390,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
  */
 
 /**
+ * Media Grid:
  * Filter out any videopress video posters that we've downloaded,
  * so that they don't seem to display twice.
  */
@@ -411,6 +412,28 @@ function videopress_ajax_query_attachments_args( $args ) {
 	$args['meta_query'] = $meta_query;
 
 	return $args;
+}
+
+/**
+ * Media List:
+ * Do the same as ^^ but for the list view.
+ */
+add_action( 'pre_get_posts', 'videopress_media_list_table_query' );
+function videopress_media_list_table_query( $query ) {
+	if ( is_admin() && $query->is_main_query() && ( 'upload' === get_current_screen()->id ) ) {
+		$meta_query = array(
+			array(
+				'key'     => 'videopress_poster_image',
+				'compare' => 'NOT EXISTS',
+			),
+		);
+
+		if ( $old_meta_query = $query->get( 'meta_query' ) ) {
+			$meta_query[] = $old_meta_query;
+		}
+
+		$query->set( 'meta_query', $meta_query );
+	}
 }
 
 /**
