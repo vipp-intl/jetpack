@@ -470,8 +470,9 @@ function videopress_override_media_templates(){
 		<iframe style="display: block; max-width: 100%;" width="{{ data.width }}" height="{{ data.height }}" src="https://videopress.com/embed/{{ data.guid }}?{{ data.urlargs }}" frameborder='0' allowfullscreen></iframe>
 	</script>
 	<script>
-		(function( TwoColumn ){
-			var old_render  = TwoColumn.prototype.render,
+		(function( media ){
+			var TwoColumn   = media.view.Attachment.Details.TwoColumn,
+				old_render  = TwoColumn.prototype.render,
 				vp_template = wp.template( 'videopress_iframe_vnext' );
 
 			TwoColumn.prototype.render = function() {
@@ -488,8 +489,9 @@ function videopress_override_media_templates(){
 						}));
 					}
 				}
-			}
-		})( wp.media.view.Attachment.Details.TwoColumn );
+			};
+
+		})( wp.media );
 	</script>
 	<?php
 }
