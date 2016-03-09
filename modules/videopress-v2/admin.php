@@ -491,6 +491,17 @@ function videopress_override_media_templates(){
 				}
 			};
 
+			var old_video_shortcode = media.video.prototype.shortcode;
+
+			media.video.prototype.defaults = _.extend( media.video.prototype.defaults, {
+				videopress_guid : ''
+			} );
+
+			media.video.prototype.shortcode = function( model ) {
+				model.videopress_guid = 'FOOBAR';
+				return old_video_shortcode( model );
+			};
+
 		})( wp.media );
 	</script>
 	<?php
