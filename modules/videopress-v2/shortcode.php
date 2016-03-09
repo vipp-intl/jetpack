@@ -161,21 +161,22 @@ function videopress_shortcode_override_for_core_shortcode( $raw_attr ) {
 	if ( $media_id ) {
 		// And that local media item has a VideoPress GUID attached to it…
 		$videopress_guid = get_post_meta( $media_id, 'videopress_guid', true );
-		if ( $videopress_guid ) {
-			$videopress_attr = array( $videopress_guid );
-			if ( $attr['width'] ) {
-				$videopress_attr['w'] = (int) $attr['width'];
-			}
-			if ( $attr['autoplay'] ) {
-				$videopress_attr['autoplay'] = $attr['autoplay'];
-			}
-			if ( $attr['loop'] ) {
-				$videopress_attr['loop'] = $attr['loop'];
-			}
+	}
 
-			// Then display the VideoPress version of the stored GUID!
-			return videopress_shortcode_callback( $videopress_attr );
+	if ( $videopress_guid ) {
+		$videopress_attr = array( $videopress_guid );
+		if ( $attr['width'] ) {
+			$videopress_attr['w'] = (int) $attr['width'];
 		}
+		if ( $attr['autoplay'] ) {
+			$videopress_attr['autoplay'] = $attr['autoplay'];
+		}
+		if ( $attr['loop'] ) {
+			$videopress_attr['loop'] = $attr['loop'];
+		}
+
+		// Then display the VideoPress version of the stored GUID!
+		return videopress_shortcode_callback( $videopress_attr );
 	}
 
 	// Nothing else caught, so fall back to the core shortcode.
