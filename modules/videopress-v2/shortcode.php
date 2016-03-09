@@ -155,6 +155,11 @@ add_filter( 'oembed_fetch_url', 'videopress_add_oembed_for_parameter' );
  */
 function videopress_shortcode_override_for_core_shortcode( $raw_attr ) {
 	$attr = $raw_attr;
+	$videopress_guid = false;
+
+	if ( isset( $attr['videopress_guid'] ) ) {
+		$videopress_guid = $attr['videopress_guid'];
+	}
 
 	// If we can find a local media item from the provided url…
 	$media_id = videopress_get_attachment_id_by_url( $attr['src'] );
