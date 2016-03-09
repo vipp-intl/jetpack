@@ -471,36 +471,41 @@ function videopress_override_media_templates(){
 	</script>
 	<script>
 		(function( media ){
-			var TwoColumn   = media.view.Attachment.Details.TwoColumn,
-				old_render  = TwoColumn.prototype.render,
-				vp_template = wp.template( 'videopress_iframe_vnext' );
+			if ( typeof media.view.Attachment.Details.TwoColumn !== 'undefined' ) {
+				var TwoColumn = media.view.Attachment.Details.TwoColumn,
+					old_render = TwoColumn.prototype.render,
+					vp_template = wp.template('videopress_iframe_vnext');
 
-			TwoColumn.prototype.render = function() {
-				// Have the original renderer run first.
-				old_render.apply( this, arguments );
+				TwoColumn.prototype.render = function () {
+					// Have the original renderer run first.
+					old_render.apply(this, arguments);
 
-				// Now our stuff!
-				if ( 'video' === this.model.get('type') ) {
-					if ( this.model.get('videopress_guid') ) {
-						this.$('.attachment-media-view .thumbnail-video').html( vp_template({
-							guid   : this.model.get('videopress_guid'),
-							width  : this.model.get('width'),
-							height : this.model.get('height')
-						}));
+					// Now our stuff!
+					if ('video' === this.model.get('type')) {
+						if (this.model.get('videopress_guid')) {
+							this.$('.attachment-media-view .thumbnail-video').html(vp_template({
+								guid: this.model.get('videopress_guid'),
+								width: this.model.get('width'),
+								height: this.model.get('height')
+							}));
+						}
 					}
-				}
-			};
+				};
+			} else { console.log( 'media.view.Attachment.Details.TwoColumn undefined' ); }
 
-			var old_video_shortcode = media.video.prototype.shortcode;
+			if ( typeof media.video !== 'undefined' ) {
+				var old_video_shortcode = media.video.shortcode.prototype;
 
-			media.video.prototype.defaults = _.extend( media.video.prototype.defaults, {
-				videopress_guid : ''
-			} );
+				media.video.defaults = _.extend(media.video.defaults, {
+					videopress_guid: ''
+				});
 
-			media.video.prototype.shortcode = function( model ) {
-				model.videopress_guid = 'FOOBAR';
-				return old_video_shortcode( model );
-			};
+				media.video.shortcode.prototype = function (model) {
+					model.videopress_guid = 'FOOBAR';
+					console.log(model);
+					return old_video_shortcode(model);
+				};
+			} else { console.log( 'media.video undefined' ); }
 
 		})( wp.media );
 	</script>
