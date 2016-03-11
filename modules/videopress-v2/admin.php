@@ -473,8 +473,8 @@ function videopress_override_media_templates(){
 		(function( media ){
 			// This handles the media library modal attachment details display.
 			if ( typeof media.view.Attachment.Details.TwoColumn !== 'undefined' ) {
-				var TwoColumn = media.view.Attachment.Details.TwoColumn,
-					old_render = TwoColumn.prototype.render,
+				var TwoColumn   = media.view.Attachment.Details.TwoColumn,
+					old_render  = TwoColumn.prototype.render,
 					vp_template = wp.template('videopress_iframe_vnext');
 
 				TwoColumn.prototype.render = function () {
@@ -494,15 +494,12 @@ function videopress_override_media_templates(){
 				};
 			} else { console.log( 'media.view.Attachment.Details.TwoColumn undefined' ); }
 
-			if ( typeof media.video !== 'undefined' ) {
-				var old_video_shortcode = media.video.shortcode.prototype;
-
-				media.video.defaults = _.extend(media.video.defaults, {
-					videopress_guid: ''
-				});
-
-				media.video.shortcode.prototype = function (model) {
 			// This handles the recreating of the shortcode when editing the mce embed.
+			if ( typeof media.video !== 'undefined' ) {
+				var old_video_shortcode = media.video.shortcode;
+
+				media.video.defaults.videopress_guid = '';
+				media.video.shortcode = function (model) {
 					model.videopress_guid = 'FOOBAR';
 					console.log(model);
 					return old_video_shortcode(model);
