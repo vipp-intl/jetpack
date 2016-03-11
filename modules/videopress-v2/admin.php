@@ -471,6 +471,7 @@ function videopress_override_media_templates(){
 	</script>
 	<script>
 		(function( media ){
+			// This handles the media library modal attachment details display.
 			if ( typeof media.view.Attachment.Details.TwoColumn !== 'undefined' ) {
 				var TwoColumn = media.view.Attachment.Details.TwoColumn,
 					old_render = TwoColumn.prototype.render,
@@ -501,6 +502,7 @@ function videopress_override_media_templates(){
 				});
 
 				media.video.shortcode.prototype = function (model) {
+			// This handles the recreating of the shortcode when editing the mce embed.
 					model.videopress_guid = 'FOOBAR';
 					console.log(model);
 					return old_video_shortcode(model);
