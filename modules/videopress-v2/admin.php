@@ -332,7 +332,7 @@ function create_local_media_library_for_videopress_guid( $guid, $parent_id = 0 )
 		'post_title'     => wp_kses( $vp_data->title, array() ),
 		'post_content'   => wp_kses( $vp_data->description, array() ),
 		'post_mime_type' => 'video/videopress',
-		'guid'           => sprintf( 'https://videopress.com/embed/%s', $guid ),
+		'guid'           => sprintf( 'https://videopress.com/v/%s', $guid ),
 	);
 
 	$attachment_id = wp_insert_attachment( $args, null, $parent_id );
