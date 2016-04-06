@@ -557,7 +557,7 @@ class Jetpack_Network {
 				'name'    => 'subsiteregister',
 				'site_id' => 1,
 			) );
-			$data = array( 'url' => $jp->build_connect_url() );
+			$data = array( 'url' => $jp->build_connect_url( false, false, 'network-page' ) );
 			Jetpack::init()->load_view( 'admin/must-connect-main-blog.php', $data );
 
 			return;

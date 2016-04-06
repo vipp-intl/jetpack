@@ -242,7 +242,7 @@
 				<?php if ( ! $data['is_connected'] && current_user_can( 'jetpack_connect' ) ) : ?>
 					<a href="<?php echo Jetpack::init()->build_connect_url( false, false, 'landing-page-top' ) ?>" class="download-jetpack"><?php esc_html_e( 'Connect Jetpack', 'jetpack' ); ?></a>
 				<?php elseif ( $data['is_connected'] && ! $data['is_user_connected'] && current_user_can( 'jetpack_connect_user' ) ) : ?>
-					<a href="<?php echo Jetpack::init()->build_connect_url( false, false, 'landing-page-top' ) ?>" class="download-jetpack"><?php esc_html_e( 'Connect your account', 'jetpack' ); ?></a>
+					<a href="<?php echo Jetpack::init()->build_connect_url( false, false, 'landing-page-top-account' ) ?>" class="download-jetpack"><?php esc_html_e( 'Connect your account', 'jetpack' ); ?></a>
 				<?php endif; ?>
 			</div>
 		</div> <?php // connect-card ?>
@@ -379,9 +379,9 @@
 		<div class="connect-card j-row">
 			<div class="connect-btn j-col j-sm-12 j-md-12">
 				<?php if ( ! $data['is_connected'] && current_user_can( 'jetpack_connect' ) ) : ?>
-					<a href="<?php echo Jetpack::init()->build_connect_url() ?>" class="download-jetpack"><?php esc_html_e( 'Connect Jetpack', 'jetpack' ); ?></a>
+					<a href="<?php echo Jetpack::init()->build_connect_url( false, false, 'landing-page-bottom' ) ?>" class="download-jetpack"><?php esc_html_e( 'Connect Jetpack', 'jetpack' ); ?></a>
 				<?php elseif ( $data['is_connected'] && ! $data['is_user_connected'] && current_user_can( 'jetpack_connect_user' ) ) : ?>
-					<a href="<?php echo Jetpack::init()->build_connect_url() ?>" class="download-jetpack"><?php esc_html_e( 'Connect your account', 'jetpack' ); ?></a>
+					<a href="<?php echo Jetpack::init()->build_connect_url( false, false, 'landing-page-bottom-account' ) ?>" class="download-jetpack"><?php esc_html_e( 'Connect your account', 'jetpack' ); ?></a>
 				<?php endif; ?>
 			</div>
 		</div> <?php // connect-card ?>
