@@ -38,10 +38,31 @@ window.JetpackFullSyncButton = ( function() {
 		);
 	}
 
+	function render_full_sync_state( state ) {
+
+	}
+
+	function set_auto_refresh( selector, timeout ) {
+		setTimeout( function() {
+			fetch_full_sync_state().done( function( new_state ) {
+				render_full_sync_state( selector, new_state );
+			} );
+			set_auto_refresh( selector, timeout );
+		}, timeout );
+	}
+
+	function fetch_full_sync_state() {
+		return jQuery.getJSON(
+			ajaxurl,
+			{ action:'jetpack-sync-full-sync-status' }
+		);
+	}
+
 	return {
-		init: function( selector ) {
+		init: function( btnSelector, statusSelector ) {
 			jQuery( selector ).click( function() {
 				begin_full_sync();
+				set_auto_refresh( statusSelector, 2000 );
 			} );
 		}
 	}
