@@ -60,6 +60,9 @@ class Jetpack_Photon {
 
 		// Responsive image srcset substitution
 		add_filter( 'wp_calculate_image_srcset', array( $this, 'filter_srcset_array' ), 10, 4 );
+		if ( ! has_filter( 'wp_calculate_image_sizes') ) { // To allow themes to fully control the sizes array.
+			add_filter( 'wp_calculate_image_sizes', array( $this, 'filter_sizes' ), 10, 2 );
+		}
 
 		// Helpers for maniuplated images
 		add_action( 'wp_enqueue_scripts', array( $this, 'action_wp_enqueue_scripts' ), 9 );
@@ -663,16 +666,34 @@ class Jetpack_Photon {
 		 *
 		 * @param array|bool $multipliers Array of multipliers to use or false to bypass.
 		 */
-		$multipliers = apply_filters( 'jetpack_photon_srcset_multipliers', array( 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3 ) );
+		$multipliers = apply_filters( 'jetpack_photon_srcset_multipliers', array(
+			'content_width' => array( 2, 3 ),
+			'full_size'     => array( 0.8, 0.6, 0.4 ),
+			 ) );
+		// Allow short-circuiting
+		if ( ! is_array( $multipliers ) ){
+			return $sources;
+		}
+
 		// If the meta isn't complete, something likely broke when uploading the original.
-		if ( isset( $image_meta['width'] ) && isset( $image_meta['file'] ) && is_array( $multipliers ) ) {
+		if ( isset( $image_meta['width'] ) && isset( $image_meta['file'] ) ) {
 			$url = trailingslashit( $upload_dir['baseurl'] ) . $image_meta['file'];
 
 			$currentwidths = array_keys( $sources );
 
+			if ( is_array( $multipliers['content_width'] ) && $content_width = Jetpack::get_content_width() ) {
+				$multipliers = $multipliers['content_width'];
+				$base        = $content_width;
+			} elseif ( is_array( $multipliers['full_size'] ) ) { // If no $content_width is set, let's make variations of the full-sized image.
+				$multipliers = $multipliers['full_size'];
+				$base        = $image_meta['width'];
+			} else { // In case someone managled the filter, let's return instead of mangling things.
+				return $sources;
+			}
+
 			foreach ( $multipliers as $multiplier ){
 				$usewidth = true;
-				$newwidth = round( $image_meta['width'] * $multiplier );
+				$newwidth = round( $base * $multiplier );
 				foreach ( $currentwidths as $currentwidth ){
 					// If a new width would be within 100 pixes of an existing one, skip.
 					if ( abs( $currentwidth - $newwidth ) < 50 ) {
@@ -692,6 +713,21 @@ class Jetpack_Photon {
 		} // if ( isset( $image_meta['width'] ) && isset( $image_meta['file'] ) )
 
 		return $sources;
+	}
+
+	public function filter_sizes( $sizes, $size ) {
+		// temporary testing code. Usage: http://example.com/?photontest=nosizes to disable sizes array filter.
+		if ( isset( $_GET['photontest'] ) && 'nosize' == $_GET['photontest'] ) {
+			return $sizes;
+		}
+		// end temporary testing code.
+
+		$content_width = Jetpack::get_content_width();
+		if ( ! $content_width || ( is_array( $size ) && $size[0] < $content_width ) ) {
+			return $sizes;
+		}
+
+		return sprintf( '(max-width: %1$dpx) 100vw, %1$dpx', $content_width );
 	}
 
 	/**
