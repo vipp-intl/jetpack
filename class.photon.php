@@ -650,7 +650,7 @@ class Jetpack_Photon {
 
 		/**
 		 * At this point, $sources is the original srcset with Photonized URLs.
-		 * Now, we're going to construct additional sizes based on percent of the original.
+		 * Now, we're going to construct additional sizes based on multiples of the content_width.
 		 * This will reduce the gap between the largest defined size and the original image.
 		 */
 
@@ -664,33 +664,21 @@ class Jetpack_Photon {
 		 *
 		 * @param array|bool $multipliers Array of multipliers to use or false to bypass.
 		 */
-		$multipliers = apply_filters( 'jetpack_photon_srcset_multipliers', array(
-			'content_width' => array( 2, 3 ),
-			'full_size'     => array( 0.8, 0.6, 0.4 ),
-			 ) );
-		// Allow short-circuiting
-		if ( ! is_array( $multipliers ) ){
-			return $sources;
-		}
+		$multipliers = apply_filters( 'jetpack_photon_srcset_multipliers', array( 2, 3 ) );
 
 		// If the meta isn't complete, something likely broke when uploading the original.
-		if ( isset( $image_meta['width'] ) && isset( $image_meta['file'] ) ) {
+		if ( is_array( $multipliers ) && isset( $image_meta['width'] ) && isset( $image_meta['file'] ) ) {
 			$url = trailingslashit( $upload_dir['baseurl'] ) . $image_meta['file'];
+
+			$content_width = Jetpack::get_content_width();
+			if ( ! $content_width ){
+				$content_width = 1000; // Provide a default width if none set by the theme.
+			}
 
 			$currentwidths = array_keys( $sources );
 
-			if ( is_array( $multipliers['content_width'] ) && $content_width = Jetpack::get_content_width() ) {
-				$multipliers = $multipliers['content_width'];
-				$base        = $content_width;
-			} elseif ( is_array( $multipliers['full_size'] ) ) { // If no $content_width is set, let's make variations of the full-sized image.
-				$multipliers = $multipliers['full_size'];
-				$base        = $image_meta['width'];
-			} else { // In case someone managled the filter, let's return instead of mangling things.
-				return $sources;
-			}
-
 			foreach ( $multipliers as $multiplier ){
-				$newwidth = round( $base * $multiplier );
+				$newwidth = round( $content_width * $multiplier );
 				foreach ( $currentwidths as $currentwidth ){
 					// If a new width would be within 100 pixes of an existing one, skip.
 					if ( abs( $currentwidth - $newwidth ) < 50 ) {
