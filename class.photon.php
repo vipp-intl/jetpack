@@ -60,9 +60,7 @@ class Jetpack_Photon {
 
 		// Responsive image srcset substitution
 		add_filter( 'wp_calculate_image_srcset', array( $this, 'filter_srcset_array' ), 10, 4 );
-		if ( ! has_filter( 'wp_calculate_image_sizes') ) { // To allow themes to fully control the sizes array.
-			add_filter( 'wp_calculate_image_sizes', array( $this, 'filter_sizes' ), 10, 2 );
-		}
+		add_filter( 'wp_calculate_image_sizes', array( $this, 'filter_sizes' ), 1, 2 ); // Early so themes can still easily filter.
 
 		// Helpers for maniuplated images
 		add_action( 'wp_enqueue_scripts', array( $this, 'action_wp_enqueue_scripts' ), 9 );
