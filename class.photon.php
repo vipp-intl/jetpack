@@ -690,22 +690,18 @@ class Jetpack_Photon {
 			}
 
 			foreach ( $multipliers as $multiplier ){
-				$usewidth = true;
 				$newwidth = round( $base * $multiplier );
 				foreach ( $currentwidths as $currentwidth ){
 					// If a new width would be within 100 pixes of an existing one, skip.
 					if ( abs( $currentwidth - $newwidth ) < 50 ) {
-						$usewidth = false;
-						break;
+						continue 2; // Back to the foreach ( $multipliers as $multiplier )
 					}
-				}
-				if ( $usewidth ){
-					$newsources[ $newwidth ] = array(
-						'url'         => jetpack_photon_url( $url, array( 'w' => $newwidth ) ),
-						'descriptor'  => 'w',
-						'value'       => $newwidth,
+				} // foreach ( $currentwidths as $currentwidth ){
+				$newsources[ $newwidth ] = array(
+					'url'         => jetpack_photon_url( $url, array( 'w' => $newwidth ) ),
+					'descriptor'  => 'w',
+					'value'       => $newwidth,
 					);
-				} // if ( $usewidth )
 			} // foreach ( $multipliers as $multiplier )
 			$sources = array_merge( $sources, $newsources );
 		} // if ( isset( $image_meta['width'] ) && isset( $image_meta['file'] ) )
