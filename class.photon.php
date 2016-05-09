@@ -705,7 +705,11 @@ class Jetpack_Photon {
 		// end temporary testing code.
 
 		$content_width = Jetpack::get_content_width();
-		if ( ! $content_width || ( is_array( $size ) && $size[0] < $content_width ) ) {
+		if ( ! $content_width ){
+			$content_width = 1000;
+		}
+
+		if ( ( is_array( $size ) && $size[0] < $content_width ) ) {
 			return $sizes;
 		}
 
