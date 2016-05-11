@@ -697,8 +697,8 @@ class Jetpack_Photon {
 			foreach ( $multipliers as $multiplier ){
 				$newwidth = $base * $multiplier;
 				foreach ( $currentwidths as $currentwidth ){
-					// If a new width would be within 100 pixes of an existing one, skip.
-					if ( abs( $currentwidth - $newwidth ) < 50 ) {
+					// If a new width would be within 100 pixes of an existing one or larger than the full size image, skip.
+					if ( abs( $currentwidth - $newwidth ) < 50 || ( $newwidth > $fullwidth ) ) {
 						continue 2; // Back to the foreach ( $multipliers as $multiplier )
 					}
 				} // foreach ( $currentwidths as $currentwidth ){
