@@ -692,6 +692,7 @@ class Jetpack_Photon {
 
 
 			$currentwidths = array_keys( $sources );
+			$newsources = null;
 
 			foreach ( $multipliers as $multiplier ){
 				$newwidth = $base * $multiplier;
@@ -720,7 +721,9 @@ class Jetpack_Photon {
 					'value'       => $newwidth,
 					);
 			} // foreach ( $multipliers as $multiplier )
-			$sources = array_merge( $sources, $newsources );
+			if ( is_array( $newsources ) ){
+				$sources = array_merge( $sources, $newsources );
+			}
 		} // if ( isset( $image_meta['width'] ) && isset( $image_meta['file'] ) )
 
 		return $sources;
