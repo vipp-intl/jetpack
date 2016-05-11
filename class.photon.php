@@ -614,7 +614,8 @@ class Jetpack_Photon {
 	 * @since 3.8.0
 	 * @since 4.1.0 Added automatically additional sizes beyond declared image sizes.
 	 * @param array $sources An array of image urls and widths.
-	 * @uses self::validate_image_url, jetpack_photon_url
+	 * @uses self::validate_image_url, jetpack_photon_url, Jetpack_Photon::parse_from_filename
+	 * @uses Jetpack_Photon::strip_image_dimensions_maybe, Jetpack::get_content_width
 	 * @return array An array of Photon image urls and widths.
 	 */
 	public function filter_srcset_array( $sources, $size_array, $image_src, $image_meta ) {
@@ -725,6 +726,15 @@ class Jetpack_Photon {
 		return $sources;
 	}
 
+	/**
+	 * Filters an array of image `sizes` values, using $content_width instead of image's full size.
+	 *
+	 * @since 4.1.0
+	 * @param array $sizes An array of media query breakpoints.
+	 * @param array $size  Width and height of the image
+	 * @uses Jetpack::get_content_width
+	 * @return array An array of media query breakpoints.
+	 */
 	public function filter_sizes( $sizes, $size ) {
 		// temporary testing code. Usage: http://example.com/?photontest=nosizes to disable sizes array filter.
 		if ( isset( $_GET['photontest'] ) && 'nosize' == $_GET['photontest'] ) {
