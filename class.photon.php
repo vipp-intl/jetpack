@@ -739,12 +739,6 @@ class Jetpack_Photon {
 	 * @return array An array of media query breakpoints.
 	 */
 	public function filter_sizes( $sizes, $size ) {
-		// temporary testing code. Usage: http://example.com/?photontest=nosizes to disable sizes array filter.
-		if ( isset( $_GET['photontest'] ) && 'nosize' == $_GET['photontest'] ) {
-			return $sizes;
-		}
-		// end temporary testing code.
-
 		$content_width = Jetpack::get_content_width();
 		if ( ! $content_width ){
 			$content_width = 1000;
