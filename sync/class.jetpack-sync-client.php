@@ -379,6 +379,8 @@ class Jetpack_Sync_Client {
 
 
 	function do_sync() {
+		error_log("mem before sync: ".memory_get_usage());
+
 		// don't sync if importing
 		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
 			$this->schedule_sync( "+1 minute" );
@@ -474,6 +476,8 @@ class Jetpack_Sync_Client {
 				$this->schedule_sync( "+1 minute" );
 			}
 		}
+		error_log("mem after sync: ".memory_get_usage());
+		error_log("peak mem after sync: ".memory_get_peak_usage());
 	}
 
 	private function buffer_includes_action( $buffer, $action_name ) {

@@ -74,8 +74,11 @@ class Jetpack_Sync_Dashboard extends Jetpack_Admin_Page {
 
 	// returns size of queue and age of oldest item (aka lag)
 	function ajax_queue_status() {
+		error_log("mem before ajax: ".memory_get_usage());
 		$response = json_encode( $this->queue_status() );
 		echo $response;
+		error_log("mem after ajax: ".memory_get_usage());
+		error_log("peak mem after ajax: ".memory_get_peak_usage());
 		exit;
 	}
 
