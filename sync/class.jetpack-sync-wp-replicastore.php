@@ -508,7 +508,12 @@ ENDSQL;
 
 	public function checksum_all() {
 		return array(
+<<<<<<< Updated upstream
 			'posts'    => $this->posts_checksum(),
+=======
+			'posts' => $this->posts_checksum(),
+			'post_ids' => $this->post_ids(),
+>>>>>>> Stashed changes
 			'comments' => $this->comments_checksum()
 		);
 	}
