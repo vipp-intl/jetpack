@@ -399,27 +399,33 @@ class Jetpack_Sync_Client {
 		$this->maybe_sync_callables();
 
 		if ( $this->sync_queue->size() === 0 ) {
+			error_log("no items");
 			return false;
 		}
 
-		$buffer = $this->sync_queue->checkout_with_memory_limit( $this->checkout_memory_size, $this->upload_max_rows );
+		$this->buffer = $this->sync_queue->checkout_with_memory_limit( $this->checkout_memory_size, $this->upload_max_rows );
 
-		if ( ! $buffer ) {
+		if ( ! $this->buffer ) {
 			// buffer has no items
+			error_log("false buffer");
 			return;
 		}
 
-		if ( is_wp_error( $buffer ) ) {
+		if ( is_wp_error( $this->buffer ) ) {
 			// another buffer is currently sending
+			error_log("locked buffer: ".$this->buffer->get_error_message());
 			return;
 		}
+
+		// install kill handler to close buffer
+		pcntl_signal ( SIGTERM, array( $this, 'close_buffer' ) );
 
 		$upload_size   = 0;
 		$items_to_send = array();
 
 		// we estimate the total encoded size as we go by encoding each item individually
 		// this is expensive, but the only way to really know :/
-		foreach ( $buffer->get_items() as $item ) {
+		foreach ( $this->buffer->get_items() as $item ) {
 
 			// expand item data, e.g. IDs into posts (for full sync)
 			$item[1] = apply_filters( "jetpack_sync_before_send_" . $item[0], $item[1] );
@@ -443,37 +449,46 @@ class Jetpack_Sync_Client {
 		 *
 		 * @param array $data The action buffer
 		 */
+		error_log("sending data");
 		$result = apply_filters( 'jetpack_sync_client_send_data', $items_to_send );
+		error_log("sent data");
+		error_log(print_r($result, 1));
 
 		if ( ! $result || is_wp_error( $result ) ) {
-			// error_log("There was an error sending data:");
-			// error_log(print_r($result, 1));
-			$result = $this->sync_queue->checkin( $buffer );
-
-			if ( is_wp_error( $result ) ) {
-				error_log( "Error checking in buffer: " . $result->get_error_message() );
-				$this->sync_queue->force_checkin();
-			}
+			error_log("There was an error sending data:");
+			error_log(print_r($result, 1));
+			$this->close_buffer();
 			// try again in 1 minute
 			$this->schedule_sync( "+1 minute" );
 		} else {
 
 			// scan the sent data to see if a full sync started or finished
-			if ( $this->buffer_includes_action( $buffer, 'jetpack_full_sync_start' ) ) {
+			if ( $this->buffer_includes_action( $this->buffer, 'jetpack_full_sync_start' ) ) {
 				$this->full_sync_client->set_status_sending_started();
 			}
 
-			if ( $this->buffer_includes_action( $buffer, 'jetpack_full_sync_end' ) ) {
+			if ( $this->buffer_includes_action( $this->buffer, 'jetpack_full_sync_end' ) ) {
 				$this->full_sync_client->set_status_sending_finished();
 			}
 
-			$this->sync_queue->close( $buffer, count( $items_to_send ) );
+			$this->sync_queue->close( $this->buffer, count( $items_to_send ) );
 			// check if there are any more events in the buffer
 			// if so, schedule a cron job to happen soon
 			if ( $this->sync_queue->has_any_items() ) {
 				$this->schedule_sync( "+1 minute" );
 			}
 		}
+		$this->buffer = null;
+	}
+
+	function close_buffer() {
+		error_log("checking in buffer without making changes");
+		$result = $this->sync_queue->checkin( $this->buffer );
+
+                if ( is_wp_error( $result ) ) {
+                        error_log( "Error checking in buffer: " . $result->get_error_message() );
+                        $this->sync_queue->force_checkin();
+                }
 	}
 
 	private function buffer_includes_action( $buffer, $action_name ) {
