@@ -379,7 +379,6 @@ class Jetpack_Sync_Client {
 
 
 	function do_sync() {
-		error_log("mem before sync: ".memory_get_usage());
 
 		// don't sync if importing
 		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
@@ -395,6 +394,8 @@ class Jetpack_Sync_Client {
 		if ( $last_sync && $sync_wait && $last_sync + $sync_wait > microtime( true ) ) {
 			return false;
 		}
+
+		error_log("mem before sync: ".memory_get_usage());
 
 		$this->set_last_sync_time();
 		$this->maybe_sync_constants();
