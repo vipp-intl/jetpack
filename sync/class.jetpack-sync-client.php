@@ -421,7 +421,8 @@ class Jetpack_Sync_Client {
 		}
 
 		// install kill handler to close buffer
-		pcntl_signal ( SIGTERM, array( $this, 'close_buffer' ) );
+		if ( function_exists( 'pcntl_signal' ) )
+			pcntl_signal ( SIGTERM, array( $this, 'close_buffer' ) );
 
 		$upload_size   = 0;
 		$items_to_send = array();
