@@ -140,7 +140,7 @@ class Jetpack_React_Page extends Jetpack_Admin_Page {
 			'isDevVersion' => Jetpack::is_development_version(),
 			'currentVersion' => JETPACK__VERSION,
 			'happinessGravIds' => jetpack_get_happiness_gravatar_ids(),
-			'getModules' => Jetpack_Core_Json_Api_Endpoints::get_modules(),
+			'getModules' => class_exists( 'Jetpack_Core_Json_Api_Endpoints' ) ? Jetpack_Core_Json_Api_Endpoints::get_modules() : '',
 			'showJumpstart' => jetpack_show_jumpstart(),
 			'rawUrl' => Jetpack::build_raw_urls( get_home_url() ),
 			'adminUrl' => esc_url( admin_url() ),
