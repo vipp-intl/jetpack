@@ -142,8 +142,7 @@ add_filter( 'oembed_fetch_url', 'videopress_add_oembed_for_parameter' );
  * WordPress Shortcode Editor View JS Code
  */
 function videopress_handle_editor_view_js() {
-	global $content_width;
-	$current_screen = get_current_screen();
+	global $content_width, $current_screen;
 	if ( ! isset( $current_screen->id ) || $current_screen->base !== 'post' ) {
 		return;
 	}

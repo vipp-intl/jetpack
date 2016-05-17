@@ -212,6 +212,38 @@ class Jetpack_Core_Json_Api_Endpoints {
 			'callback' => __CLASS__ . '::vaultpress_get_site_data',
 			'permission_callback' => __CLASS__ . '::view_admin_page_permission_check',
 		) );
+
+		// Get jetpack_notices
+		register_rest_route( 'jetpack/v4', '/admin-notices', array(
+			'methods' => WP_REST_Server::READABLE,
+			'callback' => __CLASS__ . '::get_admin_notices',
+			'permission_callback' => __CLASS__ . '::view_admin_page_permission_check',
+		) );
+	}
+
+	/**
+	 * Gets any notices that are hooked into 'admin_notices'.
+	 * Leaves all HTML intact to show in the client.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @return array|false False if nothing hooked through admin_notices
+	 */
+	public static function get_admin_notices() {
+		ob_start();
+		@do_action( 'admin_notices' );
+		$notice_html = ob_get_clean();
+
+		if ( empty( $notice_html ) ) {
+			return rest_ensure_response( false );
+		}
+
+		return rest_ensure_response(
+			array(
+				'code' => 'success',
+				'message' => $notice_html,
+			)
+		);
 	}
 
 	/**
