@@ -10,6 +10,7 @@ import Settings from 'components/settings';
 /**
  * Internal dependencies
  */
+import QueryJetpackNotices from 'components/data/query-jetpack-notices';
 import ConnectionSettings from './connection-settings';
 import { disconnectSite } from 'state/connection';
 
@@ -17,6 +18,7 @@ const GeneralSettings = React.createClass( {
 	render() {
 		return(
 			<div>
+				<QueryJetpackNotices />
 				<FoldableCard
 					header="Jetpack Add-ons"
 					subheader="Manage your Jetpack account and premium add-ons."

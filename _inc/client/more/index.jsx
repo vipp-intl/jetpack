@@ -9,6 +9,7 @@ import { ModuleToggle } from 'components/module-toggle';
 /**
  * Internal dependencies
  */
+import QueryJetpackNotices from 'components/data/query-jetpack-notices';
 import {
 	isModuleActivated as _isModuleActivated,
 	activateModule,
@@ -76,6 +77,7 @@ export const Page = ( { toggleModule, isModuleActivated, isTogglingModule, getMo
 
 	return (
 		<div>
+			<QueryJetpackNotices />
 			{ cards }
 		</div>
 	);

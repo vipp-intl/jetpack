@@ -17,9 +17,11 @@ import DashBackups from './backups';
 import DashPluginUpdates from './plugins';
 import DashPhoton from './photon';
 import DashSiteVerify from './site-verification';
+import QueryJetpackNotices from 'components/data/query-jetpack-notices';
 
 export default ( props ) =>
 	<div>
+		<QueryJetpackNotices />
 		<DashStats { ...props } />
 
 		{

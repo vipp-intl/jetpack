@@ -212,6 +212,48 @@ class Jetpack_Core_Json_Api_Endpoints {
 			'callback' => __CLASS__ . '::vaultpress_get_site_data',
 			'permission_callback' => __CLASS__ . '::view_admin_page_permission_check',
 		) );
+
+		// Get jetpack_notices
+		register_rest_route( 'jetpack/v4', '/jetpack-notices', array(
+			'methods' => WP_REST_Server::READABLE,
+			'callback' => __CLASS__ . '::get_jetpack_notices',
+			'permission_callback' => __CLASS__ . '::view_admin_page_permission_check',
+		) );
+	}
+
+	/**
+	 * Gets any notices that are hooked into 'jetpack_notices'.
+	 * Strips any HTML except links.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @return array|false False if no notices are firing.
+	 */
+	public static function get_jetpack_notices() {
+		ob_start();
+		do_action( 'jetpack_notices' );
+		$notice_html = ob_get_clean();
+
+		$return = wp_kses(
+			$notice_html,
+			array(
+				'a' => array(
+					'href' => array(),
+					'title' => array()
+				),
+			)
+		);
+
+		if ( empty( $return ) ) {
+			return rest_ensure_response( false );
+		}
+
+		return rest_ensure_response(
+			array(
+				'code' => 'success',
+				'message' => $return,
+			)
+		);
 	}
 
 	/**

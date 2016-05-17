@@ -10,6 +10,7 @@ import { getSiteConnectionStatus } from 'state/connection';
 
 const Masthead = React.createClass( {
 	render: function() {
+		console.log( this.props );
 		let devNotice = getSiteConnectionStatus( this.props ) === 'dev'
 			? <code>[Dev Mode]</code>
 			: '';
