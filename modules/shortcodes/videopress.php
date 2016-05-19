@@ -17,7 +17,6 @@ if ( ! Jetpack::is_module_active( 'videopress' ) ) {
 	 */
 	define( 'VIDEOPRESS_MIN_WIDTH', 60 );
 
-	include_once JETPACK__PLUGIN_DIR . 'modules/videopress/utility-functions.php';
 	include_once JETPACK__PLUGIN_DIR . 'modules/videopress/shortcode.php';
 
 }

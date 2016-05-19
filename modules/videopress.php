@@ -20,6 +20,5 @@ Jetpack::dns_prefetch( array(
  */
 define( 'VIDEOPRESS_MIN_WIDTH', 60 );
 
-include_once dirname( __FILE__ ) . '/videopress/utility-functions.php';
 include_once dirname( __FILE__ ) . '/videopress/shortcode.php';
 include_once dirname( __FILE__ ) . '/videopress/videopress.php';
