@@ -59,6 +59,7 @@ export const Page = ( { toggleModule, isModuleActivated, isTogglingModule, getMo
 
 	return (
 		<div>
+			<div id="jetpack-search-target"></div>
 			{ cards }
 		</div>
 	);

@@ -25,7 +25,7 @@ import Engagement from 'engagement/index.jsx';
 import Security from 'security/index.jsx';
 import Health from 'site-health/index.jsx';
 import More from 'more/index.jsx';
-import BulkModules from 'bulk-modules/index.jsx';
+import SearchPage from 'search-page/index.jsx';
 
 const Main = React.createClass( {
 	componentWillMount: function() {
@@ -85,8 +85,8 @@ const Main = React.createClass( {
 			case '/general':
 				pageComponent = <GeneralSettings { ...this.props } />;
 				break;
-			case '/bulk':
-				pageComponent = <BulkModules { ...this.props } />;
+			case '/search':
+				pageComponent = <SearchPage { ...this.props } />;
 				break;
 
 			default:

@@ -18,14 +18,24 @@ import QueryModules from 'components/data/query-modules';
 import { getModules } from 'state/modules';
 
 const Navigation = React.createClass( {
-	demoSearch: function( keywords ) {
-		const currentHash = window.location.hash;
-
-		if ( currentHash.indexOf( 'bulk' ) === -1 ) {
-			window.location.hash = 'bulk';
+	goToSearch: function() {
+		let currentHash = window.location.hash;
+		if ( currentHash.indexOf( 'search' ) === -1 ) {
+			window.location.hash = 'search';
 		}
+	},
 
-		console.log( 'Section Nav Search (keywords):', keywords );
+	onSearch: function( keywords ) {
+		document.getElementById( 'jetpack-search-target' ).innerHTML = keywords
+			? 'No results found for: ' + keywords
+			: 'All modules:';
+	},
+
+	onClose: function() {
+		let currentHash = window.location.hash;
+		if ( currentHash.indexOf( 'search' ) > -1 ) {
+			history.go( -1 );
+		}
 	},
 
 	render: function() {
@@ -47,7 +57,9 @@ const Navigation = React.createClass( {
 						placeholder="Search doesn't work yet, but you can still write stuff to the console. "
 						analyticsGroup="Pages"
 						delaySearch={ true }
-						onSearch={ this.demoSearch }
+						onKeyDown={ this.goToSearch }
+						onSearch={ this.onSearch }
+						onSearchClose={ this.onClose }
 					/>
 				</SectionNav>
 			</div>
