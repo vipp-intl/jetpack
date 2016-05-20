@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import SimpleNotice from 'components/notice';
+import { translate as __ } from 'lib/mixins/i18n';
 
 /**
  * Internal dependencies
@@ -22,16 +23,33 @@ const JetpackNotices = React.createClass( {
 		return { __html: message };
 	},
 
+	maybeShowDevVersion: function() {
+		const devVersion = window.Initial_State.isDevVersion;
+
+		if ( devVersion ) {
+			const text = __( 'You are currently running a development version of Jetpack. {{a}} Submit your feedback {{/a}}',
+				{
+					components: {
+						a: <a href="https://jetpack.com/contact-support/beta-group/" target="_blank" />
+					}
+				}
+			);
+
+			return (
+				<SimpleNotice showDismiss={ false }>
+					{ text }
+				</SimpleNotice>
+			);
+		}
+	},
+
 	renderContent: function() {
 		const notices = this.props.jetpackNotices( this.props );
 
 		if ( 'success' === notices.code ) {
-			return(
+			return (
 				<div>
-					<QueryJetpackNotices />
-					<SimpleNotice
-						showDismiss={ true }
-					>
+					<SimpleNotice showDismiss={ true }>
 						<div dangerouslySetInnerHTML={ this.renderMessage( notices.message ) } />
 					</SimpleNotice>
 				</div>
@@ -43,6 +61,7 @@ const JetpackNotices = React.createClass( {
 		return (
 			<div>
 				<QueryJetpackNotices />
+				{ this.maybeShowDevVersion() }
 				{ this.renderContent() }
 			</div>
 		);
