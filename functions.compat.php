@@ -8,7 +8,7 @@
 */
 
 function jetpack_shortcode_get_youtube_id( $url ) {
-    return jetpack_get_youtube_id( $url );
+	return jetpack_get_youtube_id( $url );
 }
 
 /**
@@ -120,10 +120,25 @@ function videopress_get_video_details( $guid ) {
 		return new WP_Error( 'bad-guid-format', __( 'Invalid Video GUID!', 'jetpack' ) );
 	}
 
-	$version  = '1.1';
-	$endpoint = sprintf( '/videos/%1$s', $guid );
-	$response = wp_remote_get( sprintf( 'https://public-api.wordpress.com/rest/v%1$s%2$s', $version, $endpoint ) );
-	$data     = json_decode( wp_remote_retrieve_body( $response ) );
+	$version   = '1.1';
+	$endpoint  = sprintf( '/videos/%1$s', $guid );
+	$query_url = sprintf(
+		'https://public-api.wordpress.com/rest/v%1$s%2$s',
+		$version,
+		$endpoint
+	);
+
+	// Look for data in our transient. If nothing, let's make a new query.
+	$data_from_cache = get_transient( 'jetpack_videopress_' . $guid );
+	if ( false === $data_from_cache ) {
+		$response = wp_remote_get( esc_url_raw( $query_url ) );
+		$data     = json_decode( wp_remote_retrieve_body( $response ) );
+
+		// Cache the response for an hour.
+		set_transient( 'jetpack_videopress_' . $guid, $data, HOUR_IN_SECONDS );
+	} else {
+		$data = $data_from_cache;
+	}
 
 	/**
 	 * Allow functions to modify fetched video details.
