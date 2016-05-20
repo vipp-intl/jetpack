@@ -15,15 +15,17 @@ import JumpStart from 'components/jumpstart';
 import { getJumpStartStatus } from 'state/jumpstart';
 import { getSiteConnectionStatus } from 'state/connection';
 import { setInitialState } from 'state/initial-state';
+import GeneralSettings from 'general-settings/index.jsx';
+import Footer from 'components/footer';
+import SupportCard from 'components/support-card';
+import NonAdminView from 'components/non-admin-view';
+// Tabs
 import AtAGlance from 'at-a-glance/index.jsx';
 import Engagement from 'engagement/index.jsx';
 import Security from 'security/index.jsx';
 import Health from 'site-health/index.jsx';
-import GeneralSettings from 'general-settings/index.jsx';
 import More from 'more/index.jsx';
-import Footer from 'components/footer';
-import SupportCard from 'components/support-card';
-import NonAdminView from 'components/non-admin-view';
+import BulkModules from 'bulk-modules/index.jsx';
 
 const Main = React.createClass( {
 	componentWillMount: function() {
@@ -82,6 +84,9 @@ const Main = React.createClass( {
 				break;
 			case '/general':
 				pageComponent = <GeneralSettings { ...this.props } />;
+				break;
+			case '/bulk':
+				pageComponent = <BulkModules { ...this.props } />;
 				break;
 
 			default:

@@ -47,6 +47,7 @@ ReactDOM.render(
 				<Route path='/health' component={ Main } />
 				<Route path='/more' component={ Main } />
 				<Route path='/general' component={ Main } />
+				<Route path='/bulk' component={ Main } />
 			</Router>
 		</Provider>
 
