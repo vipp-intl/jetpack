@@ -19,6 +19,12 @@ import { getModules } from 'state/modules';
 
 const Navigation = React.createClass( {
 	demoSearch: function( keywords ) {
+		const currentHash = window.location.hash;
+
+		if ( currentHash.indexOf( 'bulk' ) === -1 ) {
+			window.location.hash = 'bulk';
+		}
+
 		console.log( 'Section Nav Search (keywords):', keywords );
 	},
 
