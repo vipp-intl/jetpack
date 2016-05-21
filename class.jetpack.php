@@ -1404,37 +1404,6 @@ class Jetpack {
 	*
 	*/
 	public static function show_development_mode_notice() {
-		if ( Jetpack::is_development_mode() ) {
-			if ( defined( 'JETPACK_DEV_DEBUG' ) && JETPACK_DEV_DEBUG ) {
-				$notice = sprintf(
-					/* translators: %s is a URL */
-					__( 'In <a href="%s" target="_blank">Development Mode</a>, via the JETPACK_DEV_DEBUG constant being defined in wp-config.php or elsewhere.', 'jetpack' ),
-					'http://jetpack.com/support/development-mode/'
-				);
-			} elseif ( site_url() && false === strpos( site_url(), '.' ) ) {
-				$notice = sprintf(
-					/* translators: %s is a URL */
-					__( 'In <a href="%s" target="_blank">Development Mode</a>, via site URL lacking a dot (e.g. http://localhost).', 'jetpack' ),
-					'http://jetpack.com/support/development-mode/'
-				);
-			} else {
-				$notice = sprintf(
-					/* translators: %s is a URL */
-					__( 'In <a href="%s" target="_blank">Development Mode</a>, via the jetpack_development_mode filter.', 'jetpack' ),
-					'http://jetpack.com/support/development-mode/'
-				);
-			}
-
-			echo '<div class="updated" style="border-color: #f0821e;"><p>' . $notice . '</p></div>';
-		}
-
-		// Throw up a notice if using a development version and as for feedback.
-		if ( Jetpack::is_development_version() ) {
-			/* translators: %s is a URL */
-			$notice = sprintf( __( 'You are currently running a development version of Jetpack. <a href="%s" target="_blank">Submit your feedback</a>', 'jetpack' ), 'https://jetpack.com/contact-support/beta-group/' );
-
-			echo '<div class="updated" style="border-color: #f0821e;"><p>' . $notice . '</p></div>';
-		}
 		// Throw up a notice if using staging mode
 		if ( Jetpack::is_staging_site() ) {
 			/* translators: %s is a URL */
