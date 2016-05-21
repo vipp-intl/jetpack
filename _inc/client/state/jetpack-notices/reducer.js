@@ -10,7 +10,8 @@ import assign from 'lodash/assign';
 import {
 	JETPACK_NOTICES_FETCH,
 	JETPACK_NOTICES_FETCH_FAIL,
-	JETPACK_NOTICES_FETCH_SUCCESS
+	JETPACK_NOTICES_FETCH_SUCCESS,
+	DISCONNECT_SITE_SUCCESS
 } from 'state/action-types';
 import restApi from 'rest-api';
 
@@ -18,6 +19,9 @@ const status = ( state = false , action ) => {
 	switch ( action.type ) {
 		case JETPACK_NOTICES_FETCH_SUCCESS:
 			return action.jetpackNotices;
+
+		case DISCONNECT_SITE_SUCCESS:
+			return 'disconnected';
 
 		default:
 			return state;

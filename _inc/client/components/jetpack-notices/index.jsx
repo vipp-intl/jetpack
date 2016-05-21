@@ -43,8 +43,6 @@ const JetpackNotices = React.createClass( {
 	},
 	maybeShowDevMode: function() {
 		const devMode = window.Initial_State.connectionStatus.devMode;
-		const isStaging = window.Initial_State.connectionStatus.isStaging;
-
 		if ( ! devMode.isActive ) {
 			return;
 		}
@@ -86,15 +84,24 @@ const JetpackNotices = React.createClass( {
 		}
 	},
 
-	renderContent: function() {
-		console.log( window.Initial_State.connectionStatus );
+	actionNotices: function() {
 		const notices = this.props.jetpackNotices( this.props );
 
-		if ( false ) {
+		if ( 'disconnected' === notices ) {
 			return (
 				<div>
-					<SimpleNotice showDismiss={ true }>
-						<div dangerouslySetInnerHTML={ this.renderMessage( notices.message ) } />
+					<SimpleNotice>
+						{ __( 'You have successfully disconnected Jetpack' ) }
+						<br/>
+						{
+							__(	'Would you tell us why? Just {{a}}answering two simple questions{{/a}} would help us improve Jetpack.',
+								{
+									components: {
+										a: <a href="https://jetpack.com/survey-disconnected/" target="_blank" />
+									}
+								}
+							)
+						}
 					</SimpleNotice>
 				</div>
 			);
@@ -108,7 +115,7 @@ const JetpackNotices = React.createClass( {
 				{ this.maybeShowDevVersion() }
 				{ this.maybeShowDevMode() }
 				{ this.maybeShowStagingSite() }
-				{ this.renderContent() }
+				{ this.actionNotices() }
 			</div>
 		);
 	}

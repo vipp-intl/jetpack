@@ -12,7 +12,6 @@ import { fetchJetpackNotices } from 'state/jetpack-notices';
 
 class QueryJetpackNotices extends Component {
 	componentWillMount() {
-		console.log( 'loasdf' );
 		this.props.fetchJetpackNotices();
 	}
 

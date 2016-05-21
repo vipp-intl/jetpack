@@ -8,7 +8,6 @@ import Card from 'components/card';
 /**
  * Internal dependencies
  */
-import QueryJetpackNotices from 'components/data/query-jetpack-notices';
 import ConnectButton from 'components/connect-button';
 import { imagePath } from 'constants';
 
@@ -18,7 +17,6 @@ const JetpackConnect = React.createClass( {
 	render: function() {
 		return (
 			<div className="jp-jetpack-connect__container">
-				<QueryJetpackNotices />
 				<h1 className="jp-jetpack-connect__container-title" title="Please connect Jetpack to WordPress.com">Please Connect Jetpack</h1>
 
 				<Card className="jp-jetpack-connect__cta">
