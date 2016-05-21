@@ -554,8 +554,6 @@ class Jetpack {
 
 		add_action( 'plugins_loaded', array( $this, 'extra_oembed_providers' ), 100 );
 
-		add_action( 'jetpack_notices', array( $this, 'show_development_mode_notice' ) );
-
 		/**
 		 * These actions run checks to load additional files.
 		 * They check for external files or plugins, so they need to run as late as possible.
@@ -1398,20 +1396,9 @@ class Jetpack {
 	}
 
 	/**
-	* Get Jetpack development mode notice text and notice class.
-	*
-	* Mirrors the checks made in Jetpack::is_development_mode
-	*
+	* @deprecated deprecated since 4.1
 	*/
-	public static function show_development_mode_notice() {
-		// Throw up a notice if using staging mode
-		if ( Jetpack::is_staging_site() ) {
-			/* translators: %s is a URL */
-			$notice = sprintf( __( 'You are running Jetpack on a <a href="%s" target="_blank">staging server</a>.', 'jetpack' ), 'https://jetpack.com/support/staging-sites/' );
-
-			echo '<div class="updated" style="border-color: #f0821e;"><p>' . $notice . '</p></div>';
-		}
-	}
+	public static function show_development_mode_notice() {}
 
 	/**
 	 * Whether Jetpack's version maps to a public release, or a development version.
