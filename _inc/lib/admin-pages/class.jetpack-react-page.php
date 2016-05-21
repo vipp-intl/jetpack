@@ -105,6 +105,7 @@ class Jetpack_React_Page extends Jetpack_Admin_Page {
 			'pluginBaseUrl' => plugins_url( '', JETPACK__PLUGIN_FILE ),
 			'connectionStatus' => array(
 				'isActive'  => Jetpack::is_active(),
+				'isStaging' => Jetpack::is_staging_site(),
 				'devMode'   => array(
 					'isActive' => Jetpack::is_development_mode(),
 					'constant' => defined( 'JETPACK_DEV_DEBUG' ) && JETPACK_DEV_DEBUG,

@@ -41,9 +41,10 @@ const JetpackNotices = React.createClass( {
 			);
 		}
 	},
-
 	maybeShowDevMode: function() {
 		const devMode = window.Initial_State.connectionStatus.devMode;
+		const isStaging = window.Initial_State.connectionStatus.isStaging;
+
 		if ( ! devMode.isActive ) {
 			return;
 		}
@@ -67,6 +68,23 @@ const JetpackNotices = React.createClass( {
 			</SimpleNotice>
 		);
 	},
+	maybeShowStagingSite: function() {
+		if ( window.Initial_State.connectionStatus.isStaging ) {
+			const text = __( 'You are running Jetpack on a {{a}}staging server{{/a}}.',
+				{
+					components: {
+						a: <a href="https://jetpack.com/support/staging-sites/" target="_blank" />
+					}
+				}
+			);
+
+			return (
+				<SimpleNotice showDismiss={ false }>
+					{ text }
+				</SimpleNotice>
+			);
+		}
+	},
 
 	renderContent: function() {
 		console.log( window.Initial_State.connectionStatus );
@@ -89,6 +107,7 @@ const JetpackNotices = React.createClass( {
 				<QueryJetpackNotices />
 				{ this.maybeShowDevVersion() }
 				{ this.maybeShowDevMode() }
+				{ this.maybeShowStagingSite() }
 				{ this.renderContent() }
 			</div>
 		);
