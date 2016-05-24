@@ -34,6 +34,34 @@ jQuery( document ).ready( function($) {
 		set_auto_refresh( this, 2000 );
 	};
 
+	$.fn.displayLog = function( initial_state ) {
+		function render_progress( $element, state ) {
+			$element.html(
+				'<h2>Log:</h2>' + state.join( "<br /> ")
+			);
+		}
+
+		function set_auto_refresh( $element, timeout ) {
+			setTimeout( function() {
+				fetch_state().done( function( new_state ) {
+					render_progress( $element, new_state );
+					set_auto_refresh( $element, timeout );
+				} ).fail( function() {
+					$element.html( 'Something went wrong' );
+				} );
+			}, timeout );
+		}
+
+		function fetch_state() {
+			return $.getJSON(
+				ajaxurl,
+				{ action:'jetpack-sync-get-queue' }
+			);
+		}
+		render_progress( this, JSON.parse( initial_state ) );
+		set_auto_refresh( this, 1000 );
+	};
+
 	$.fn.resetQueueButton = function() {
 		function do_reset_queue() {
 			return $.getJSON(
@@ -100,7 +128,7 @@ jQuery( document ).ready( function($) {
 
 	$.fn.fullSyncStatus = function( $button_el ) {
 		function render_full_sync_status( $element, state ) {
-		
+
 			$( '#display-sync-status' ).html( sync_template( state ) );
 			// $element.html( JSON.stringify( state ) );
 			$element.html('');
@@ -133,6 +161,7 @@ jQuery( document ).ready( function($) {
 		set_auto_refresh( this, 2000, $button_el );
 	};
 	$( '#sync_status' ).syncStatus( sync_dashboard.queue_status );
+	$( '#sync-log').displayLog( sync_dashboard.initial_queue );
 	$( '#reset_queue_button').resetQueueButton();
 	$( '#unlock_queue_button').unlockQueueButton();
 	$( '#full_sync_button' ).fullSyncButton();

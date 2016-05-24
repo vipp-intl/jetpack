@@ -49,12 +49,14 @@ class Jetpack_Sync_Dashboard extends Jetpack_Admin_Page {
 			),
 		);
 		$initial_queue_status     = json_encode( $this->queue_status() );
+		$initial_queue = 		  json_encode( $this->get_queue() );
 		$initial_full_sync_status = json_encode( $this->full_sync_status() );
 
 		wp_localize_script( 'jetpack_sync_reindex_control', 'sync_dashboard', array(
 			'possible_status'  => $strings,
 			'queue_status'     => $initial_queue_status,
-			'full_sync_status' => $initial_full_sync_status
+			'full_sync_status' => $initial_full_sync_status,
+			'initial_queue'	=> $initial_queue,
 		) );
 	}
 
@@ -64,17 +66,23 @@ class Jetpack_Sync_Dashboard extends Jetpack_Admin_Page {
 
 	function init() {
 		add_action( 'wp_ajax_jetpack-sync-queue-status', array( $this, 'ajax_queue_status' ) );
+		add_action( 'wp_ajax_jetpack-sync-get-queue', array( $this, 'ajax_get_queue' ) );
 		add_action( 'wp_ajax_jetpack-sync-reset-queue', array( $this, 'ajax_reset_queue' ) );
 		add_action( 'wp_ajax_jetpack-sync-unlock-queue', array( $this, 'ajax_unlock_queue' ) );
 		add_action( 'wp_ajax_jetpack-sync-begin-full-sync', array( $this, 'ajax_begin_full_sync' ) );
 		add_action( 'wp_ajax_jetpack-sync-cancel-full-sync', array( $this, 'ajax_cancel_full_sync' ) );
 		add_action( 'wp_ajax_jetpack-sync-full-sync-status', array( $this, 'ajax_full_sync_status' ) );
-
 	}
 
 	// returns size of queue and age of oldest item (aka lag)
 	function ajax_queue_status() {
 		$response = json_encode( $this->queue_status() );
+		echo $response;
+		exit;
+	}
+
+	function ajax_get_queue() {
+		$response = json_encode( $this->get_queue() );
 		echo $response;
 		exit;
 	}
@@ -97,7 +105,7 @@ class Jetpack_Sync_Dashboard extends Jetpack_Admin_Page {
 	}
 
 	function ajax_cancel_full_sync() {
-		// TODO	
+		// TODO
 	}
 
 	function ajax_full_sync_status() {
@@ -116,9 +124,23 @@ class Jetpack_Sync_Dashboard extends Jetpack_Admin_Page {
 		);
 	}
 
+	function get_queue() {
+		$client = Jetpack_Sync_Client::getInstance();
+		$actions_in_queue = array();
+		$queue  = $client->get_sync_queue();
+		$all = $queue->get_all();
+		if ( ! is_array ( $all ) ) {
+			return array();
+		}
+		foreach( $all as $que ) {
+			$actions_in_queue[] = str_replace( '_', ' ', $que->value[0] );
+			$actions_in_queue[] = $que->value[1];
+		}
+		return $actions_in_queue;
+	}
+
 	function full_sync_status() {
 		$client = Jetpack_Sync_Client::getInstance();
-
 		return $client->get_full_sync_client()->get_complete_status();
 	}
 
@@ -138,6 +160,9 @@ class Jetpack_Sync_Dashboard extends Jetpack_Admin_Page {
 				<button class="button" id="full_sync_button">Do full sync</button>
 				<div id="full_sync_status"></div>
 				<div id="display-sync-status"></div>
+
+				<div id="sync-log">
+				</div>
 			</div>
 		</div>
 		<?php
