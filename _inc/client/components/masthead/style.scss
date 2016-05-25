@@ -1,6 +1,4 @@
 .jp-masthead {
-	text-align: center;
-
 	@media (max-width: rem( 720px ) ) {
 		padding: 0 rem( 24px );
 	}
@@ -14,10 +12,15 @@
 	width: 100%;
 	max-width: rem( 720px );
 	display: flex;
-	flex-flow: row nowrap;
+	flex-flow: row wrap;
+
+	@include breakpoint( "<480px" ) {
+		padding: rem( 16px ) 0;
+	}
 }
 
 .jp-masthead__logo-container {
+	flex-grow: 1;
 	padding: rem( 5px ) 0 0;
 }
 
@@ -30,14 +33,23 @@
 }
 
 .jp-masthead__links {
-	display: flex;
-	flex-flow: row wrap;
-	flex: 2 50%;
-	justify-content: flex-end;
+	// display: flex;
+	// flex-flow: row wrap;
+	// flex: 2 50%;
+	// justify-content: flex-end;
+	align-self: center;
 	margin: 0;
 
 	@include breakpoint( "<480px" ) {
 		padding-right: rem( 10px );
+		display: flex;
+		width: 100%;
+		margin-top: rem( 16px );
+		margin-bottom: rem( 8px );
+
+		.dops-button {
+			flex: 1;
+		}
 	}
 }
 
