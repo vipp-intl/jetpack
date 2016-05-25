@@ -3,6 +3,8 @@
  */
 import React from'react';
 import { translate as __ } from 'lib/mixins/i18n';
+import Button from 'components/button';
+import ButtonGroup from 'components/button-group';
 
 /**
  * Internal dependencies
@@ -25,24 +27,14 @@ const Masthead = React.createClass( {
 						{ devNotice }
 					</div>
 
-					<ul className="jp-masthead__links">
-						<li className="jp-masthead__link-li">
-							<a href="http://jetpack.com/support/" target="_blank" className="jp-masthead__link">
-								<span className="dashicons dashicons-editor-help" title={ __( 'Need Help?' ) } />
-								<span>
-									{ __( 'Need Help?' ) }
-								</span>
-							</a>
-						</li>
-						<li className="jp-masthead__link-li">
-							<a href="http://surveys.jetpack.me/research-plugin?rel=3.9.4" target="_blank" className="jp-masthead__link">
-								<span className="dashicons dashicons-admin-comments" title={ __( 'Send us Feedback' ) } />
-								<span>
-									{ __( 'Send us Feedback' ) }
-								</span>
-							</a>
-						</li>
-					</ul>
+					<ButtonGroup className="jp-masthead__links">
+						<Button compact className="jp-masthead__button">
+								{ __( 'Dashboard' ) }
+						</Button>
+						<Button compact className="jsp-masthead__button">
+								{ __( 'Settings' ) }
+						</Button>
+					</ButtonGroup>
 				</div>
 			</div>
 		)
