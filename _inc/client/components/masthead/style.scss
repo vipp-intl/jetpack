@@ -32,11 +32,7 @@
 	}
 }
 
-.jp-masthead__links {
-	// display: flex;
-	// flex-flow: row wrap;
-	// flex: 2 50%;
-	// justify-content: flex-end;
+.jp-masthead .dops-button-group {
 	align-self: center;
 	margin: 0;
 
@@ -50,45 +46,5 @@
 		.dops-button {
 			flex: 1;
 		}
-	}
-}
-
-.jp-masthead__link-li {
-	margin: 0;
-	padding: 0;
-}
-
-.jp-masthead__link {
-	font-style: normal;
-	padding: rem( 10px );
-	display: inline-block;
-
-	&:hover {
-		text-decoration: underline;
-	}
-
-	.dashicons {
-		display: none;
-	}
-
-	@include breakpoint( "<480px" ) {
-
-		&:hover,
-		&:active {
-			text-decoration: none;
-		}
-		.dashicons {
-			display: block;
-			font-size: rem( 28px );
-		}
-		span + span {
-			display: none;
-		}
-	}
-}
-
-.jp-masthead__link-li {
-	&:last-of-type .jp-masthead__link {
-		padding-right: 0;
 	}
 }

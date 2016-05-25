@@ -27,11 +27,11 @@ const Masthead = React.createClass( {
 						{ devNotice }
 					</div>
 
-					<ButtonGroup className="jp-masthead__links">
-						<Button compact className="jp-masthead__button">
+					<ButtonGroup>
+						<Button compact>
 								{ __( 'Dashboard' ) }
 						</Button>
-						<Button compact className="jsp-masthead__button">
+						<Button compact>
 								{ __( 'Settings' ) }
 						</Button>
 					</ButtonGroup>
