@@ -81,7 +81,10 @@ class Jetpack_Sync_Defaults {
 		'disabled_reblogs',
 		'jetpack_comment_likes_enabled',
 		'twitter_via',
-		'twitter-cards-site-tag'
+		'twitter-cards-site-tag',
+		'active_plugins',
+		'uninstall_plugins',
+		'jetpack_autoupdate_plugins',
 	);
 
 	static $default_constants_whitelist = array(
@@ -104,6 +107,7 @@ class Jetpack_Sync_Defaults {
 		'is_main_network'              => array( 'Jetpack', 'is_multi_network' ),
 		'is_multi_site'                => 'is_multisite',
 		'main_network_site'            => 'network_site_url',
+		'get_plugins'                  => 'get_plugins',
 		'single_user_site'             => array( 'Jetpack', 'is_single_user_site' ),
 		'has_file_system_write_access' => array( 'Jetpack_Sync_Functions', 'file_system_write_access' ),
 		'is_version_controlled'        => array( 'Jetpack_Sync_Functions', 'is_version_controlled' ),
