@@ -34,6 +34,7 @@ class Jetpack_XMLRPC_Server {
 				'jetpack.getComments'       => array( $this, 'get_comments' ),
 				'jetpack.disconnectBlog'    => array( $this, 'disconnect_blog' ),
 				'jetpack.unlinkUser'        => array( $this, 'unlink_user' ),
+				'videopress.reserve_id'     => array( $this, 'vp_reserve_id' ),
 			) );
 
 			if ( isset( $core_methods['metaWeblog.editPost'] ) ) {
@@ -484,5 +485,12 @@ class Jetpack_XMLRPC_Server {
 			(string) $nonce,
 			(string) $hmac,
 		);
+	}
+
+	public static function vp_reserve_id() {
+		return wp_insert_post( array(
+			'post_type'   => 'attachment',
+			'post_status' => 'draft',
+		) );
 	}
 }
