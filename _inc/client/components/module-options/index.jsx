@@ -123,6 +123,11 @@ const TextInputOption = React.createClass( {
 
 export const ModuleOptionTextInput = connectModuleOptions( TextInputOption );
 
+/**
+ * [connectModuleOptions description]
+ * @param  {[type]} Component [description]
+ * @return {[type]}           [description]
+ */
 export function connectModuleOptions( Component ) {
 	return connect(
 		( state, ownProps ) => {
