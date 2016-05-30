@@ -1,4 +1,10 @@
 <?php
+/*
+ * WARNING: This file is distributed verbatim in Jetpack.
+ * There should be nothing WordPress.com specific in this file.
+ *
+ * @hide-in-jetpack
+ */
 
 /*
 [vimeo 141358]
@@ -162,36 +168,6 @@ function vimeo_shortcode( $atts ) {
 
 add_shortcode( 'vimeo', 'vimeo_shortcode' );
 
-/**
- * Callback to modify output of embedded Vimeo video using Jetpack's shortcode.
- *
- * @since 3.9
- *
- * @param array $matches Regex partial matches against the URL passed.
- * @param array $attr Attributes received in embed response
- * @param array $url Requested URL to be embedded
- *
- * @return string Return output of Vimeo shortcode with the proper markup.
- */
-function wpcom_vimeo_embed_url( $matches, $attr, $url ) {
-	return vimeo_shortcode( array( $url ) );
-}
-
-/**
- * For bare URLs on their own line of the form
- * http://vimeo.com/12345
- *
- * @since 3.9
- *
- * @uses wpcom_vimeo_embed_url
- */
-function wpcom_vimeo_embed_url_init() {
-	wp_embed_register_handler( 'wpcom_vimeo_embed_url', '#https?://(.+\.)?vimeo\.com/#i', 'wpcom_vimeo_embed_url' );
-}
-
-// Register handler to modify Vimeo embeds using Jetpack's shortcode output.
-add_action( 'init', 'wpcom_vimeo_embed_url_init' );
-
 function vimeo_embed_to_shortcode( $content ) {
 	if ( false === stripos( $content, 'player.vimeo.com/video/' ) ) {
 		return $content;
@@ -233,70 +209,3 @@ function vimeo_embed_to_shortcode( $content ) {
 }
 
 add_filter( 'pre_kses', 'vimeo_embed_to_shortcode' );
-
-/**
- * Replaces shortcodes and plain-text URLs to Vimeo videos with Vimeo embeds.
- * Covers shortcode usage [vimeo 1234] | [vimeo https://vimeo.com/1234] | [vimeo http://vimeo.com/1234]
- * Or plain text URLs https://vimeo.com/1234 | vimeo.com/1234 | //vimeo.com/1234
- * Links are left intact.
- *
- * @since 3.7.0
- * @since 3.9.5 One regular expression matches shortcodes and plain URLs.
- *
- * @param string $content HTML content
- * @return string The content with embeds instead of URLs
- */
-function vimeo_link( $content ) {
-	/**
-	 *  [vimeo 12345]
-	 *  [vimeo http://vimeo.com/12345]
-	 */
-	$shortcode = "(?:\[vimeo\s+[^0-9]*)([0-9]+)(?:\])";
-
-	/**
-	 *  http://vimeo.com/12345
-	 *  https://vimeo.com/12345
-	 *  //vimeo.com/12345
-	 *  vimeo.com/some/descender/12345
-	 *
-	 *  Should not capture inside HTML attributes
-	 *  [Not] <a href="vimeo.com/12345">Cool Video</a>
-	 *  [Not] <a href="https://vimeo.com/12345">vimeo.com/12345</a>
-	 *
-	 *  Could erroneously capture:
-	 *  <a href="some.link/maybe/even/vimeo">This video (vimeo.com/12345) is teh cat's meow!</a>
-	 */
-	$plain_url = "(?:[^'\">]?\/?(?:https?:\/\/)?vimeo\.com[^0-9]+)([0-9]+)(?:[^'\"0-9<]|$)";
-
-	return jetpack_preg_replace_callback_outside_tags(
-			sprintf( '#%s|%s#i', $shortcode, $plain_url ),
-			'vimeo_link_callback',
-			$content,
-			'vimeo'
-	);
-}
-
-/**
- * Callback function for the regex that replaces Vimeo URLs with Vimeo embeds.
- *
- * @since 3.7.0
- *
- * @param array $matches An array containing a Vimeo URL.
- * @return string The Vimeo HTML embed code.
- */
-function vimeo_link_callback( $matches ) {
-	$id = isset( $matches[ 2 ] ) ? $matches[ 2 ] : $matches[ 1 ];
-	if ( isset( $id ) && ctype_digit( $id ) ) {
-		return "\n" . vimeo_shortcode( array( 'id' => $id ) ) . "\n";
-	}
-	return $matches[ 0 ];
-}
-
-/** This filter is documented in modules/shortcodes/youtube.php */
-if ( apply_filters( 'jetpack_comments_allow_oembed', get_option('embed_autourls') ) ) {
-	// We attach wp_kses_post to comment_text in default-filters.php with priority of 10 anyway, so the iframe gets filtered out.
-	if ( ! is_admin() ) {
-		// Higher priority because we need it before auto-link and autop get to it
-		add_filter( 'comment_text', 'vimeo_link', 1 );
-	}
-}

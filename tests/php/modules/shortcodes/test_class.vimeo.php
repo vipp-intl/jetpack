@@ -122,20 +122,28 @@ class WP_Test_Jetpack_Shortcodes_Vimeo extends WP_UnitTestCase {
 		$text_link = 'Vimeo <a href="https://vimeo.com/123456">link</a>';
 		$url_link = 'Link <a href="https://vimeo.com/123456">https://vimeo.com/123456</a>';
 
-		$this->assertContains( $player, vimeo_link( "[vimeo $video_id]" ) );
-		$this->assertContains( $player, vimeo_link( "[vimeo http://vimeo.com/$video_id]" ) );
-		$this->assertContains( $player, vimeo_link( "[vimeo https://vimeo.com/$video_id]" ) );
-		$this->assertContains( $player, vimeo_link( "[vimeo //vimeo.com/$video_id]" ) );
-		$this->assertContains( $player, vimeo_link( "[vimeo vimeo.com/$video_id]" ) );
-		$this->assertContains( $player, vimeo_link( "http://vimeo.com/$video_id" ) );
-		$this->assertContains( $player, vimeo_link( "https://vimeo.com/$video_id" ) );
-		$this->assertContains( $player, vimeo_link( "//vimeo.com/$video_id" ) );
-		$this->assertContains( $player, vimeo_link( "vimeo.com/$video_id" ) );
+		$this->assertContains( $player, jetpack_shortcode_in_comments( "[vimeo $video_id]" ) );
+		$this->assertContains( $player, jetpack_shortcode_in_comments( "[vimeo http://vimeo.com/$video_id]" ) );
+		$this->assertContains( $player, jetpack_shortcode_in_comments( "[vimeo https://vimeo.com/$video_id]" ) );
+		$this->assertContains( $player, jetpack_shortcode_in_comments( "[vimeo //vimeo.com/$video_id]" ) );
+		$this->assertContains( $player, jetpack_shortcode_in_comments( "[vimeo vimeo.com/$video_id]" ) );
 
-		$this->assertEquals( $text_link, vimeo_link( $text_link ) );
-		$this->assertEquals( $url_link, vimeo_link( $url_link ) );
+		global $post;
+		$post = $this->factory()->post->create_and_get();
+		do_action( 'init' );
+		setup_postdata( $post );
 
-		$mixed = vimeo_link( "[vimeo $video_id]\nvimeo.com/$video_id\n$text_link\n$url_link" );
+		$this->assertContains( $player, jetpack_autoembed_in_comments( "http://vimeo.com/$video_id" ) );
+		$this->assertContains( $player, jetpack_autoembed_in_comments( "https://vimeo.com/$video_id" ) );
+		$this->assertContains( "//vimeo.com/$video_id", jetpack_autoembed_in_comments( "//vimeo.com/$video_id" ) );
+		$this->assertContains( "vimeo.com/$video_id", jetpack_autoembed_in_comments( "vimeo.com/$video_id" ) );
+		$this->assertEquals( $text_link, jetpack_autoembed_in_comments( $text_link ) );
+		$this->assertEquals( $url_link, jetpack_autoembed_in_comments( $url_link ) );
+
+		$mixed = jetpack_shortcode_in_comments( jetpack_autoembed_in_comments( "[vimeo $video_id]\nvimeo.com/$video_id\n$text_link\n$url_link" ) );
+
+		wp_reset_postdata();
+
 		$this->assertContains( $player, $mixed );
 		$this->assertContains( $text_link, $mixed );
 		$this->assertContains( $url_link, $mixed );

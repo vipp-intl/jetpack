@@ -157,3 +157,77 @@ if ( ! function_exists( 'jetpack_shortcode_get_wpvideo_id' ) ) {
 }
 
 jetpack_load_shortcodes();
+
+/**
+ * Replaces plain-text URLs to Vimeo videos with Vimeo embeds.
+ * Or plain text URLs https://vimeo.com/1234 | vimeo.com/1234 | //vimeo.com/1234
+ * Links are left intact.
+ *
+ * @since 4.0.4
+ *
+ * @param string $content HTML content
+ * @return string The content with embeds instead of URLs
+ */
+function jetpack_autoembed_in_comments( $content ) {
+	global $wp_embed;
+
+	$content = $wp_embed->autoembed( $content );
+
+	return $content;
+}
+
+/**
+ * Replaces shortcodes with Vimeo embeds.
+ * Covers shortcode usage [vimeo 1234] | [vimeo https://vimeo.com/1234] | [vimeo http://vimeo.com/1234]
+ *
+ * @since 4.0.4
+ *
+ * @param string $content HTML content
+ * @return string The content with embeds instead of URLs
+ */
+function jetpack_shortcode_in_comments( $content ) {
+	global $shortcode_tags;
+
+	// Backup current registered shortcodes
+	$orig_shortcode_tags = $shortcode_tags;
+
+	$whitelist = array( 'vimeo' );
+
+	// We're only going to execute the whitelisted shortcodes
+	$shortcode_tags = array_intersect_key( $shortcode_tags, array_flip( $whitelist ) );
+
+	$content = do_shortcode( $content );
+
+	// Put the original shortcodes back
+	$shortcode_tags = $orig_shortcode_tags;
+
+	return $content;
+}
+
+/**
+ * Wrap core WordPress embeds in a div to allow easier targeting via CSS.
+ *
+ * @since 4.0.4
+ *
+ * @param string $html HTML that will be embedded.
+ * @param object $data Oembed Provider.
+ *
+ * @return string
+ */
+function jetpack_wrap_embeds_in_a_div( $html, $data ) {
+	if ( ! empty( $data->provider_name ) && ( 'video' == $data->type || 'rich' == $data->type ) ) {
+		$html = '<div class="embed-' . esc_attr( strtolower( sanitize_html_class( $data->provider_name ) ) ) . '">' . $html . '</div>';
+	}
+	return $html;
+}
+
+/** This filter is documented in modules/shortcodes/youtube.php */
+if ( apply_filters( 'jetpack_comments_allow_oembed', get_option('embed_autourls') ) ) {
+	// We attach wp_kses_post to comment_text in default-filters.php with priority of 10 anyway, so the iframe gets filtered out.
+	if ( ! is_admin() ) {
+		// Higher priority because we need it before auto-link and autop get to it
+		add_filter( 'comment_text', 'jetpack_autoembed_in_comments', 1 );
+		add_filter( 'comment_text', 'jetpack_shortcode_in_comments', 8 );
+		add_filter( 'oembed_dataparse', 'jetpack_wrap_embeds_in_a_div', 5, 2 );
+	}
+}
