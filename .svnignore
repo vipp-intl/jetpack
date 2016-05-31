@@ -18,3 +18,5 @@ modules/shortcodes/upcoming-events.php
 modules/widgets/upcoming-events.php
 to-test.md
 .editorconfig
+_inc/client
+_inc/build/admin.js.map
