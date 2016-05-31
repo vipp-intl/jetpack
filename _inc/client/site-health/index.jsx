@@ -17,8 +17,14 @@ import {
 	getModule as _getModule
 } from 'state/modules';
 import { ModuleToggle } from 'components/module-toggle';
+import { isUnavailableInDevMode } from 'state/connection';
 
-export const Page = ( { toggleModule, isModuleActivated, isTogglingModule, getModule } ) => {
+export const Page = ( props ) => {
+	let { toggleModule,
+		isModuleActivated,
+		isTogglingModule,
+		getModule
+		} = props;
 	var cards = [
 		[ 'manage', getModule( 'manage' ).name, getModule( 'manage' ).description, getModule( 'manage' ).learn_more_button ],
 		[ 'backups', 'Site Backups', 'Keep your site backed up!' ],
@@ -41,6 +47,7 @@ export const Page = ( { toggleModule, isModuleActivated, isTogglingModule, getMo
 				summary={ toggle }
 				expandedSummary={ toggle }
 				clickableHeaderText={ true }
+				disabled={ isUnavailableInDevMode( props, element[0] ) }
 			>
 				{ isModuleActivated( element[0] ) || 'akismet' === element[0] || 'backups' === element[0] ? renderSettings( element[0] ) :
 					// Render the long_description if module is deactivated

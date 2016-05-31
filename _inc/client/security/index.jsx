@@ -18,8 +18,14 @@ import {
 } from 'state/modules';
 import { ModuleToggle } from 'components/module-toggle';
 import { SecurityModulesSettings } from 'components/module-options/moduleoptions';
+import { isUnavailableInDevMode } from 'state/connection';
 
-export const Page = ( { toggleModule, isModuleActivated, isTogglingModule, getModule } ) => {
+export const Page = ( props ) => {
+	let { toggleModule,
+		isModuleActivated,
+		isTogglingModule,
+		getModule
+		} = props;
 	var cards = [
 		[ 'protect', getModule( 'protect' ).name, getModule( 'protect' ).description, getModule( 'protect' ).learn_more_button ],
 		[ 'monitor', getModule( 'monitor' ).name, getModule( 'monitor' ).description, getModule( 'monitor' ).learn_more_button ],
@@ -43,6 +49,7 @@ export const Page = ( { toggleModule, isModuleActivated, isTogglingModule, getMo
 				summary={ toggle }
 				expandedSummary={ toggle }
 				clickableHeaderText={ true }
+				disabled={ isUnavailableInDevMode( props, element[0] ) }
 			>
 				{ isModuleActivated( element[0] ) || 'scan' === element[0] ?
 					<SecurityModulesSettings module={ getModule( element[ 0 ] ) } /> :
