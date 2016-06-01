@@ -817,6 +817,10 @@ class Jetpack_Sync_Client {
 		}
 	}
 
+	function update_options_whitelist() {
+		$this->options_whitelist = apply_filters( 'jetpack_options_whitelist', Jetpack_Sync_Defaults::$default_options_whitelist );
+	}
+
 	function set_defaults() {
 		$this->sync_queue = new Jetpack_Sync_Queue( 'sync' );
 
@@ -833,7 +837,7 @@ class Jetpack_Sync_Client {
 		/**
 		 * This filter is already documented class.wpcom-json-api-get-option-endpoint.php
 		 */
-		$this->options_whitelist         = apply_filters( 'jetpack_options_whitelist', Jetpack_Sync_Defaults::$default_options_whitelist );
+		$this->update_options_whitelist();
 		$this->network_options_whitelist = Jetpack_Sync_Defaults::$default_network_options_whitelist;
 		$this->taxonomy_whitelist        = Jetpack_Sync_Defaults::$default_taxonomy_whitelist;
 		$this->is_multisite              = is_multisite();
