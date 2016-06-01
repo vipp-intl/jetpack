@@ -804,16 +804,10 @@ class Jetpack_Sync_Client {
 	function get_settings() {
 		$settings = array();
 		foreach( array_keys( self::$valid_settings ) as $setting ) {
-			$default_name = "default_$setting";
+			$default_name = "default_$setting"; // e.g. default_dequeue_max_bytes
 			$settings[ $setting ] = get_option( self::SETTINGS_OPTION_PREFIX.$setting, Jetpack_Sync_Defaults::$$default_name );
 		}
 		return $settings;
-		// return array(
-		// 	'dequeue_max_bytes' => get_option( self::SETTINGS_OPTION_PREFIX.'dequeue_max_bytes', Jetpack_Sync_Defaults::$default_dequeue_max_bytes ),
-		// 	'upload_max_bytes'  => get_option( self::SETTINGS_OPTION_PREFIX.'upload_max_bytes', Jetpack_Sync_Defaults::$default_upload_max_bytes ),
-		// 	'upload_max_rows'   => get_option( self::SETTINGS_OPTION_PREFIX.'upload_max_rows', Jetpack_Sync_Defaults::$default_upload_max_rows ),
-		// 	'sync_wait_time'    => get_option( self::SETTINGS_OPTION_PREFIX.'sync_wait_time', Jetpack_Sync_Defaults::$default_sync_wait_time )
-		// );
 	}
 
 	function update_settings( $new_settings ) {
