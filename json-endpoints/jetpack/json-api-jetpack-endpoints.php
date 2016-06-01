@@ -608,6 +608,7 @@ $sync_settings_response = array(
 new Jetpack_JSON_API_Sync_Get_Settings_Endpoint( array(
 	'description'     => 'Update sync settings',
 	'method'          => 'GET',
+	'group'           => '__do_not_document',
 	'path'            => '/sites/%s/sync/settings',
 	'stat'            => 'write-sync-settings',
 	'path_labels' => array(
@@ -621,6 +622,7 @@ new Jetpack_JSON_API_Sync_Get_Settings_Endpoint( array(
 new Jetpack_JSON_API_Sync_Modify_Settings_Endpoint( array(
 	'description'     => 'Update sync settings',
 	'method'          => 'POST',
+	'group'           => '__do_not_document',
 	'path'            => '/sites/%s/sync/settings',
 	'stat'            => 'write-sync-settings',
 	'path_labels' => array(
